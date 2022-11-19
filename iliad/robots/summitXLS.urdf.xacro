@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<robot name="panda" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="robot_name" default="panda"/>
+
+    <xacro:arg name="prefix" default="summit_xl_"/>
+    <!-- Flag to select the high or low quality model -->
+    <xacro:property name="hq" value="true" />
+    <xacro:arg name="gpu" default="false"/>
+
+    <!-- SUMMIT XLS -->
+    <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xls_base.urdf.xacro" />
+    <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+    
+    <xacro:summit_xls_base prefix="$(arg prefix)" publish_bf="true" hq="${hq}" />
+
+    <xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
+    
+    <xacro:property name="wheel_offset_x" value="0.2225" /> 
+    <xacro:property name="wheel_offset_y" value="0.2045" />
+    <xacro:property name="wheel_offset_z" value="0.0" />
+
+    <xacro:property name="front_laser_offset_x" value="0.2865"/>
+    <xacro:property name="front_laser_offset_y" value="-0.20894"/>
+    <xacro:property name="front_laser_offset_z" value="0.2973"/>
+
+    <xacro:property name="rear_laser_offset_x" value="-0.2865"/>
+    <xacro:property name="rear_laser_offset_y" value="0.20894"/>
+    <xacro:property name="rear_laser_offset_z" value="0.2973"/>
+
+    <xacro:property name="front_ptz_camera_offset_x" value="0.308"/>
+    <xacro:property name="front_ptz_camera_offset_y" value="0.141"/>
+    <xacro:property name="front_ptz_camera_offset_z" value="0.195"/>
+
+    <xacro:property name="rear_ptz_camera_offset_x" value="-0.308"/>
+    <xacro:property name="rear_ptz_camera_offset_y" value="-0.141"/>
+    <xacro:property name="rear_ptz_camera_offset_z" value="0.195"/>
+
+    <xacro:property name="imu_offset_x" value="0.127"/>
+    <xacro:property name="imu_offset_y" value="-0.129"/>
+    <xacro:property name="imu_offset_z" value="0.212"/>
+
+    <xacro:property name="front_rgbd_camera_offset_x" value="0.35850"/>
+    <xacro:property name="front_rgbd_camera_offset_y" value="0.0"/>
+    <xacro:property name="front_rgbd_camera_offset_z" value="0.25062"/>
+
+    <xacro:property name="gps_offset_x" value="-0.365"/>
+    <xacro:property name="gps_offset_y" value="-0.167"/>
+    <xacro:property name="gps_offset_z" value="0.302"/>
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+
+
+    <xacro:omni_wheel prefix="$(arg prefix)front_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
+        <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>
+
+    <xacro:omni_wheel prefix="$(arg prefix)front_left" parent="$(arg prefix)base_link" reflect="true" hq="${hq}">
+        <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>
+
+    <xacro:omni_wheel prefix="$(arg prefix)back_left" parent="$(arg prefix)base_link" reflect="true" hq="${hq}">
+        <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>
+
+    <xacro:omni_wheel prefix="$(arg prefix)back_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
+        <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>
+    
+    <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true"/>
+
+<!-- Gazebo plugin for ROS Control -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+  
+    
+</robot>
