@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
-<robot name="panda" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:arg name="robot_name" default="panda"/>
+<robot name="summit_xls" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="robot_name" default="summit_xls"/>
 
-    <xacro:arg name="prefix" default="summit_xl_"/>
     <!-- Flag to select the high or low quality model -->
-    <xacro:property name="hq" value="true" />
-    <xacro:arg name="gpu" default="false"/>
+	<xacro:property name="hq" value="true" />
+
+	<xacro:arg name="prefix" default="summit_xl_"/>
+	<xacro:arg name="ros_planar_move_plugin" default="false"/>
+	<xacro:arg name="ros_planar_move_plugin_force_based" default="false"/>
+	<xacro:arg name="gpu" default="false"/>
 
     <!-- SUMMIT XLS -->
     <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xls_base.urdf.xacro" />
@@ -66,14 +69,23 @@
         <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
     </xacro:omni_wheel>
     
-    <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true"/>
-
-<!-- Gazebo plugin for ROS Control -->
-  <gazebo>
+    <xacro:ros_control/>
+<!--
+    <xacro:if value="$(arg ros_planar_move_plugin)">
+        <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true" force_based="$(arg ros_planar_move_plugin_force_based)"/>
+    </xacro:if>
+ -->
+     <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true" force_based="false"/>
+    
+    <!--   <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true"/> -->
+   
+    <!-- Gazebo plugin for ROS Control -->
+    <!--
+    <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>/</robotNamespace>
+        <robotNamespace>/</robotNamespace>
     </plugin>
-  </gazebo>
-  
+    </gazebo>
+    -->
     
 </robot>

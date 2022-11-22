@@ -1,0 +1,53 @@
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find iliad)/robots/summitXLS.urdf.xacro" />
+  
+ <!-- <arg name="rvizconfig" default="$(find iliad)/rviz/urdf.rviz" />-->
+    <arg name="rvizconfig" default="$(find iliad)/rviz/summitxl_a.rviz" />
+
+    <arg name="wheels_gui" default="true" />
+    
+  <!-- GAZEBO arguments -->
+    <arg name="paused" default="false" />
+    <arg name="use_sim_time" default="true" />
+    <arg name="gazebo_gui" default="true" />
+    <arg name="headless" default="false" />
+    <arg name="debug" default="false" />
+    <arg name="load_gripper" default="true" />
+
+  <!--launch GAZEBO with own world configuration -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gazebo_gui)" />
+        <arg name="paused" value="$(arg paused)" />
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+        <arg name="headless" value="$(arg headless)" />
+    </include>
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-unpause -urdf -model robot -param robot_description" respawn="false" output="screen" />
+    
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+    <!--<node name="joint_state_desired_publisher" pkg="topic_tools" type="relay" args="joint_states joint_states_desired" />-->
+    <node if="$(arg wheels_gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+    <node unless="$(arg wheels_gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    
+    <!-- start summit_xl_control nodes -->
+    <arg name="omni_drive" default="true" />
+    <arg if="$(arg omni_drive)" name="ros_planar_move_plugin" value="true"/>
+    <arg unless="$(arg omni_drive)" name="ros_planar_move_plugin" default="true"/>
+    <arg name="launch_robot_localization" default="true" />
+
+    <include ns="robotnik_base_control" file="$(find summit_xl_control)/launch/summit_xl_control.launch">
+        <arg name="prefix" value="robot_"/>
+        <arg name="sim" value="true"/>
+
+        <arg if="$(arg omni_drive)" name="kinematics" value="omni"/>
+        <arg unless="$(arg omni_drive)" name="kinematics" value="skid"/>
+
+        <arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
+    </include>
+    
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> 
+
+</launch>
