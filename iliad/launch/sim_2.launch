@@ -3,7 +3,7 @@
 <launch>
     <!-- Various arguments -->
     <arg name="rvizconfig" default="$(find iliad)/rviz/summitxl_a.rviz" />
-    <arg name="wheels_gui" default="false" />
+    <arg name="wheels_gui" default="true" />
 
     <arg name="omni_drive" default="true" />
     <arg if="$(arg omni_drive)" name="ros_planar_move_plugin" value="true"/>
