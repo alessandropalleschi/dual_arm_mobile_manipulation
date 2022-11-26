@@ -1,4 +1,4 @@
-<!-- Launch this file to simulate the iliad robot-->
+<!-- Launch this file to simulate the robot composed by a summit XL Steel, UR10e and a Franka Panda -->
 
 <launch>
     <!-- Various arguments -->
