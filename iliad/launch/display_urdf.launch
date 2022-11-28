@@ -28,9 +28,9 @@
     <param name="robot_description" command="$(find xacro)/xacro '$(arg model)' 
            prefix:=$(arg prefix)" />
     
-    
+    <!--
     <node if="$(arg jsp_gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
-    <node unless="$(arg jsp_gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node unless="$(arg jsp_gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" /> -->
     <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
         <param name="publish_frequency" type="double" value="30.0" />
     </node>
@@ -38,7 +38,24 @@
     <!-- push robot_description to factory and spawn robot in gazebo -->
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
     args="-unpause -urdf -model iliad -param robot_description" respawn="false" output="screen" />
+    
+    <rosparam command="load"
+            file="$(find iliad)/config/joints.yaml"
+            ns="iliad_joint_state_controller" />  
+    <rosparam command="load"
+            file="$(find iliad)/config/diffdrive.yaml"
+            ns="iliad_diff_drive_controller" />
 
+    <node name="iliad_controller_spawner" pkg="controller_manager" type="spawner"
+    args="iliad_joint_state_controller
+          iliad_diff_drive_controller
+          --shutdown-timeout 3"/>
+    
+    
+    <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+        <param name="default_topic" value="/iliad_diff_drive_controller/cmd_vel"/>
+    </node>
+    
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />   
 
 </launch>
