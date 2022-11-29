@@ -83,9 +83,9 @@
     />
     
     <joint name="summit_tu_ur10e" type="fixed">
-    <parent link="robot_base_chapa"/>
-    <child link="ur_base_link"/>
-    <origin xyz="0.24 0.18 0" rpy="0 0 0"/>
+        <parent link="robot_base_chapa"/>
+        <child link="ur_base_link"/>
+        <origin xyz="0.24 0.18 0" rpy="0 0 0"/>
     </joint>
 <!--
     <link name="tool0_controller"/>
@@ -102,10 +102,20 @@
    <!-- Here I should add Franka Panda arm 
    <xacro:panda connected_to="" xyz="" rpy="" />-->
 
+   <xacro:include filename="$(find iliad)/urdf/franka_robot.xacro"/>
+
+    <xacro:arg name="arm_id" default="panda" />
+
+    <xacro:franka_robot arm_id="$(arg arm_id)"
+                        joint_limits="${xacro.load_yaml('$(find iliad)/robots/joint_limits.yaml')}">
+    </xacro:franka_robot>
    
-   
-   <!-- ROS Plugins -->
     
+    
+    
+    
+    
+   <!-- ROS Plugins -->
     <gazebo>
         <plugin name="ros_control" filename="libgazebo_ros_control.so">
             <robotParam>robot_description</robotParam>
@@ -115,10 +125,10 @@
             <legacyModeNS>true</legacyModeNS>
         </plugin>
     </gazebo>
-    
+     <!--
    <xacro:if value="$(arg ros_planar_move_plugin)">
 	   <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true" force_based="$(arg ros_planar_move_plugin_force_based)"/>
-   </xacro:if>
+   </xacro:if>-->
    
 
 
