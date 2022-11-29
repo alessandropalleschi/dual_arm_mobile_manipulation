@@ -8,8 +8,6 @@ Panels:
         - /Status1
         - /RobotModel1
         - /TF1
-        - /TF1/Tree1/robot_base_footprint1
-        - /TF1/Tree1/robot_base_footprint1/robot_base_link1
       Splitter Ratio: 0.45955249667167664
     Tree Height: 740
   - Class: rviz/Selection
@@ -124,6 +122,57 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        ur_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ur_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ur_base_link_inertia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur_flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ur_forearm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur_shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur_tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ur_upper_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur_wrist_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur_wrist_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur_wrist_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -159,6 +208,30 @@ Visualization Manager:
           Value: true
         robot_front_right_wheel_link:
           Value: true
+        robot_odom:
+          Value: true
+        ur_base:
+          Value: true
+        ur_base_link:
+          Value: true
+        ur_base_link_inertia:
+          Value: true
+        ur_flange:
+          Value: true
+        ur_forearm_link:
+          Value: true
+        ur_shoulder_link:
+          Value: true
+        ur_tool0:
+          Value: true
+        ur_upper_arm_link:
+          Value: true
+        ur_wrist_1_link:
+          Value: true
+        ur_wrist_2_link:
+          Value: true
+        ur_wrist_3_link:
+          Value: true
       Marker Alpha: 1
       Marker Scale: 0.5
       Name: TF
@@ -166,35 +239,48 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        robot_base_footprint:
-          robot_base_link:
-            robot_back_left_wheel_link:
-              {}
-            robot_back_right_wheel_link:
-              {}
-            robot_base_chapa:
-              {}
-            robot_base_docking_contact:
-              {}
-            robot_base_logo_front:
-              {}
-            robot_base_logo_left:
-              {}
-            robot_base_logo_rear:
-              {}
-            robot_base_logo_right:
-              {}
-            robot_front_left_wheel_link:
-              {}
-            robot_front_right_wheel_link:
-              {}
+        robot_odom:
+          robot_base_footprint:
+            robot_base_link:
+              robot_back_left_wheel_link:
+                {}
+              robot_back_right_wheel_link:
+                {}
+              robot_base_chapa:
+                ur_base_link:
+                  ur_base:
+                    {}
+                  ur_base_link_inertia:
+                    ur_shoulder_link:
+                      ur_upper_arm_link:
+                        ur_forearm_link:
+                          ur_wrist_1_link:
+                            ur_wrist_2_link:
+                              ur_wrist_3_link:
+                                ur_flange:
+                                  ur_tool0:
+                                    {}
+              robot_base_docking_contact:
+                {}
+              robot_base_logo_front:
+                {}
+              robot_base_logo_left:
+                {}
+              robot_base_logo_rear:
+                {}
+              robot_base_logo_right:
+                {}
+              robot_front_left_wheel_link:
+                {}
+              robot_front_right_wheel_link:
+                {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: robot_base_link
+    Fixed Frame: robot_odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -218,7 +304,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.8336825370788574
+      Distance: 4.540130615234375
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1

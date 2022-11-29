@@ -8,7 +8,6 @@
 	<!-- Import summit XL base elements and wheels -->
 	<xacro:include filename="$(find iliad)/urdf/summit_xls_base.urdf.xacro" />
 	<xacro:include filename="$(find iliad)/urdf/omni_wheel.urdf.xacro" />
-    
     <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_base.gazebo.xacro" />
 
     
@@ -46,24 +45,77 @@
 		<xacro:omni_wheel prefix="$(arg prefix)back_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
 			<origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
 		</xacro:omni_wheel>     
-   </xacro:macro>
-      
-   
-   <xacro:summit_xl prefix="$(arg prefix)" publish_bf="true" hq="true"/>
+    </xacro:macro>
+        
+    <!-- Robot Assembling -->   
+    <xacro:summit_xl prefix="$(arg prefix)" publish_bf="true" hq="true"/>
+    
+    <!-- ********************************************************************************************************************************************* -->
+    <!-- ********************************************************************************************************************************************* -->
+    <!-- ********************************************************************************************************************************************* -->
+    
+    <!-- Here I should add UR10e arm -->
+    <xacro:include filename="$(find iliad)/urdf/ur_macro.xacro"/>
+    <xacro:arg name="robot_model" default="ur10e" />
+    <!--Parameter files -->
+    <xacro:arg name="joint_limit_params" default="$(find ur_description)/config/ur10e/joint_limits.yaml"/>
+    <xacro:arg name="kinematics_params" default="$(find ur_description)/config/ur10e/default_kinematics.yaml"/>
+    <xacro:arg name="physical_params" default="$(find ur_description)/config/ur10e/physical_parameters.yaml"/>
+    <xacro:arg name="visual_params" default="$(find ur_description)/config/ur10e/visual_parameters.yaml"/>
 
+    <!--Common parameters -->
+    <xacro:arg name="transmission_hw_interface" default="hardware_interface/EffortJointInterface" doc="The hardware_interface to expose for each joint in the simulated robot (one of: [PositionJointInterface, VelocityJointInterface, EffortJointInterface])"/>
+    <xacro:arg name="safety_limits" default="false" doc="If True, enable the safety limits controller"/>
+    <xacro:arg name="safety_pos_margin" default="0.15" doc="The lower/upper limits in the safety controller" />
+    <xacro:arg name="safety_k_position" default="20" doc="Used to set k position in the safety controller" />
+
+    <!-- Instantiate the Gazebo robot and pass it all the required arguments. -->
+    <xacro:ur_robot_gazebo
+        prefix="ur_"
+        joint_limits_parameters_file="$(arg joint_limit_params)"
+        kinematics_parameters_file="$(arg kinematics_params)"
+        physical_parameters_file="$(arg physical_params)"
+        visual_parameters_file="$(arg visual_params)"
+        transmission_hw_interface="$(arg transmission_hw_interface)"
+        safety_limits="$(arg safety_limits)"
+        safety_pos_margin="$(arg safety_pos_margin)"
+        safety_k_position="$(arg safety_k_position)"
+    />
+    
+    <joint name="summit_tu_ur10e" type="fixed">
+    <parent link="robot_base_chapa"/>
+    <child link="ur_base_link"/>
+    <origin xyz="0.24 0.18 0" rpy="0 0 0"/>
+    </joint>
+<!--
+    <link name="tool0_controller"/>
+    <joint name="tool_controller_fake_joint" type="fixed">
+    <parent link="tool0"/>
+    <child link="tool0_controller"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>-->
+    
+    <!-- ********************************************************************************************************************************************* -->
+    <!-- ********************************************************************************************************************************************* -->
+    <!-- ********************************************************************************************************************************************* -->
+    
+   <!-- Here I should add Franka Panda arm 
+   <xacro:panda connected_to="" xyz="" rpy="" />-->
+
+   
    
    <!-- ROS Plugins -->
     
     <gazebo>
         <plugin name="ros_control" filename="libgazebo_ros_control.so">
             <robotParam>robot_description</robotParam>
+            <robotNamespace>/</robotNamespace>
             <controlPeriod>0.001</controlPeriod>
             <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
             <legacyModeNS>true</legacyModeNS>
         </plugin>
     </gazebo>
     
-   <!---->
    <xacro:if value="$(arg ros_planar_move_plugin)">
 	   <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true" force_based="$(arg ros_planar_move_plugin_force_based)"/>
    </xacro:if>
