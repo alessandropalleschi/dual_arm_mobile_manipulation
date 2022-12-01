@@ -1,5 +1,5 @@
 type: "diff_drive_controller/DiffDriveController"
-publish_rate: 50
+publish_rate: 500
 
 left_wheel: ['summitxls_front_left_wheel_joint', 'summitxls_back_left_wheel_joint']
 right_wheel: ['summitxls_front_right_wheel_joint', 'summitxls_back_right_wheel_joint']
