@@ -40,13 +40,7 @@
 
   <!-- Definition of the main macro -->
   <xacro:macro name="ur_robot_gazebo" params="
-   prefix
-   joint_limits_parameters_file
-   kinematics_parameters_file
-   physical_parameters_file
-   visual_parameters_file
-   transmission_hw_interface:=hardware_interface/EffortJointInterface
-   safety_limits:=false safety_pos_margin:=0.15 safety_k_position:=20"
+   prefix"
   >
     <!--
       Import the xacro macro for the REAL robot (which we'll augment with Gazebo
@@ -57,7 +51,19 @@
     -->
   <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
 
+    Parameter files -->
+    <xacro:property name="joint_limits_parameters_file" value="$(find ur_description)/config/ur10e/joint_limits.yaml"/>
+    <xacro:property name="kinematics_parameters_file" value="$(find ur_description)/config/ur10e/default_kinematics.yaml"/>
+    <xacro:property name="physical_parameters_file" value="$(find ur_description)/config/ur10e/physical_parameters.yaml"/>
+    <xacro:property name="visual_parameters_file" value="$(find ur_description)/config/ur10e/visual_parameters.yaml"/>
 
+    <!--Common parameters -->
+    <xacro:property name="transmission_hw_interface" value="hardware_interface/EffortJointInterface"/> <!--doc="The hardware_interface to expose for each joint in the simulated robot (one of: [PositionJointInterface, VelocityJointInterface, EffortJointInterface])"-->
+    <xacro:property name="safety_limits" value="false"/> <!--doc="If True, enable the safety limits controller"-->
+    <xacro:property name="safety_pos_margin" value="0.15"/> <!--doc="The lower/upper limits in the safety controller" -->
+    <xacro:property name="safety_k_position" value="20" /> <!--doc="Used to set k position in the safety controller"-->
+    
+    
     <!-- Instantiate model for the REAL robot. -->
     <xacro:ur_robot
       prefix="${prefix}"

@@ -1,0 +1,130 @@
+<launch>
+    
+    <!-- Model of the robot -->
+    <arg name="robot_model" default="$(find iliad)/urdf/iliad.urdf.xacro"/>
+    <arg name="panda_base_x"     default="0.22"/>
+    <arg name="panda_base_y"     default="-0.15"/>
+    <arg name="panda_base_z"     default="0.00"/>
+    <arg name="panda_base_roll"  default="0"/>
+    <arg name="panda_base_pitch" default="0"/>
+    <arg name="panda_base_yaw"   default="0"/>
+    <arg name="ur10e_base_x"     default="0.24"/>
+    <arg name="ur10e_base_y"     default="0.18"/>
+    <arg name="ur10e_base_z"     default="0.00"/>
+    <arg name="ur10e_base_roll"  default="0"/>
+    <arg name="ur10e_base_pitch" default="0"/>
+    <arg name="ur10e_base_yaw"   default="0"/>
+    
+    <!-- RViz Configuration -->
+    <arg name="rvizconfig" default="$(find iliad)/rviz/iliad_rviz.rviz" />
+    <arg name="launch_rviz" default="true"/>
+    0
+    <!-- Gazebo Arguments-->
+    <arg name="gazebo_paused" default="false"/>
+    <arg name="gazebo_use_sim_time" default="true"/>
+    <arg name="gazebo_gui" default="true"/>
+    <arg name="gazebo_headless" default="false"/>
+    <arg name="gazebo_debug" default="false"/>
+
+    <!-- Open Gazebo World -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="$(arg gazebo_paused)"/>
+        <arg name="use_sim_time" value="$(arg gazebo_use_sim_time)"/>
+        <arg name="gui" value="$(arg gazebo_gui)" />
+        <arg name="headless" value="$(arg gazebo_headless)"/>
+        <arg name="debug" value="$(arg gazebo_debug)" />        
+    </include>
+    
+    <!-- Load the robot description of the complete robot -->
+    <arg name="summit_prefix" default="summitxls_"/>    <!-- if change this args, change also controller definition in .yaml files--> 
+    <arg name="ur10e_prefix"  default="ur10e_"/>
+    <arg name="panda_prefix"  default="panda"/>
+        
+    <arg name="ros_planar_move_plugin" default="true"/>
+    
+    <!-- Load robot model in ROS parameter server -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'
+        panda_base_x:=$(arg panda_base_x)
+        panda_base_y:=$(arg panda_base_y)  
+        panda_base_z:=$(arg panda_base_z)
+        panda_base_roll:=$(arg panda_base_roll)
+        panda_base_pitch:=$(arg panda_base_pitch)
+        panda_base_yaw:=$(arg panda_base_yaw)
+        ur10e_base_x:=$(arg ur10e_base_x)
+        ur10e_base_y:=$(arg ur10e_base_y)
+        ur10e_base_z:=$(arg ur10e_base_z)
+        ur10e_base_roll:=$(arg ur10e_base_roll)
+        ur10e_base_pitch:=$(arg ur10e_base_pitch)
+        ur10e_base_yaw:=$(arg ur10e_base_yaw)
+     
+        summit_prefix:=$(arg summit_prefix)
+        ur10e_prefix:=$(arg ur10e_prefix)
+        panda_prefix:=$(arg panda_prefix)
+
+        ros_planar_move_plugin:=$(arg ros_planar_move_plugin)"
+        />
+    
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+        args="-unpause -urdf -model iliad -param robot_description" respawn="false" output="screen" />
+        
+        
+    <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="500.0" />
+    </node>
+
+    <rosparam command="load"
+            file="$(find iliad)/config/joints.yaml"
+            ns="iliad_joint_state_controller" />      
+    
+    <!-- <xacro:if value="${summit_control_mode}">-->
+    <rosparam command="load"
+            file="$(find iliad)/config/diffdrive.yaml"
+            ns="iliad_diff_drive_controller" />
+    <node name="iliad_controller_spawner" pkg="controller_manager" type="spawner"
+    args="iliad_joint_state_controller
+          iliad_diff_drive_controller
+          --shutdown-timeout 3"/>
+    <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+        <param name="default_topic" value="/iliad_diff_drive_controller/cmd_vel"/>
+    </node>
+     <!--</xacro:if>-->
+    
+    <!--USE ROS PLANAR PLUGIN -->
+    <!--<xacro:unless value="${summit_control_mode}">
+        <node name="iliad_controller_spawner" pkg="controller_manager" type="spawner"
+        args="iliad_joint_state_controller
+              shutdown-timeout 3"/>
+        <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+            <param name="default_topic" value="/robotnik_base_control/cmd_vel"/>
+        </node>-->
+     <!--</xacro:unless>-->
+        
+    <rosparam command="load"
+            file="$(find iliad)/config/ur10e_controllers.yaml"/>
+    
+    <node name="ur10e_controller_spawner" pkg="controller_manager" type="spawner"
+    args="ur10e_shoulder_pan_joint_position_controller 
+          ur10e_shoulder_lift_joint_position_controller 
+          ur10e_elbow_joint_position_controller
+          ur10e_wrist_1_joint_position_controller
+          ur10e_wrist_2_joint_position_controller
+          ur10e_wrist_3_joint_position_controller"
+    output="screen" respawn="false" />
+    
+    <rosparam command="load"
+            file="$(find iliad)/config/panda_controllers.yaml"/>
+    
+    <node name="panda_controller_spawner" pkg="controller_manager" type="spawner"
+    args="panda_joint1_position_controller 
+          panda_joint2_position_controller 
+          panda_joint3_position_controller
+          panda_joint4_position_controller
+          panda_joint5_position_controller
+          panda_joint6_position_controller
+          panda_joint7_position_controller"
+    output="screen" respawn="false" />
+        
+    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />   
+
+</launch>

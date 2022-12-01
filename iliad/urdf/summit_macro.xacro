@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="iliad" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- Definition of the main macro -->
+  <xacro:macro name="summit_xls_macro" params="
+    prefix
+    publish_bf
+    hq"
+  >
+      
+    <xacro:include filename="$(find iliad)/urdf/summit_xls_base.urdf.xacro" />
+	<xacro:include filename="$(find iliad)/urdf/omni_wheel.urdf.xacro" />
+    
+	<!-- Wheel parameters -->
+	<xacro:property name="wheel_offset_x" value="0.2225" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+	<xacro:property name="wheel_offset_y" value="0.2045" />
+	<xacro:property name="wheel_offset_z" value="0.0" />
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    
+    <arg name="summit_prefix" default="summitxls_"/>
+
+    <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+    <xacro:summit_xls_base prefix="$(arg summit_prefix)" publish_bf="true" hq="${hq}" />
+
+    <xacro:omni_wheel prefix="$(arg summit_prefix)front_right" parent="$(arg summit_prefix)base_link" reflect="false" hq="${hq}">
+        <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>
+    <xacro:omni_wheel prefix="$(arg summit_prefix)front_left" parent="$(arg summit_prefix)base_link" reflect="true" hq="${hq}">
+        <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>
+    <xacro:omni_wheel prefix="$(arg summit_prefix)back_left" parent="$(arg summit_prefix)base_link" reflect="true" hq="${hq}">
+        <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>
+    <xacro:omni_wheel prefix="$(arg summit_prefix)back_right" parent="$(arg summit_prefix)base_link" reflect="false" hq="${hq}">
+        <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:omni_wheel>     
+
+  </xacro:macro>
+</robot>
+ 

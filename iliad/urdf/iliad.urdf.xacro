@@ -1,93 +1,39 @@
 <?xml version="1.0"?>
 <robot name="iliad" xmlns:xacro="http://wiki.ros.org/xacro">
         
-	<!-- *****************  Imported elements  ***************** -->
-
-	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
-
-	<!-- Import summit XL base elements and wheels -->
-	<xacro:include filename="$(find iliad)/urdf/summit_xls_base.urdf.xacro" />
-	<xacro:include filename="$(find iliad)/urdf/omni_wheel.urdf.xacro" />
-    <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_base.gazebo.xacro" />
-
+    <xacro:arg name="panda_base_x"     default="0"/>
+    <xacro:arg name="panda_base_y"     default="0"/>
+    <xacro:arg name="panda_base_z"     default="0"/>
+    <xacro:arg name="panda_base_roll"  default="0"/>
+    <xacro:arg name="panda_base_pitch" default="0"/>
+    <xacro:arg name="panda_base_yaw"   default="0"/>
+    <xacro:arg name="ur10e_base_x"     default="0"/>
+    <xacro:arg name="ur10e_base_y"     default="0"/>
+    <xacro:arg name="ur10e_base_z"     default="0"/>
+    <xacro:arg name="ur10e_base_roll"  default="0"/>
+    <xacro:arg name="ur10e_base_pitch" default="0"/>
+    <xacro:arg name="ur10e_base_yaw"   default="0"/>
     
-	<xacro:property name="PI" value="3.1415926535897931"/>
-
-	<!-- Wheel parameters -->
-	<xacro:property name="wheel_offset_x" value="0.2225" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
-	<xacro:property name="wheel_offset_y" value="0.2045" />
-	<xacro:property name="wheel_offset_z" value="0.0" />
+    <xacro:arg name="summit_prefix" default="summitxls_"/>
+    <xacro:arg name="ur10e_prefix"  default="ur10e_"/>
+    <xacro:arg name="panda_prefix"  default="panda"/>
     
-	<!-- Flag to select the high or low quality model -->
-    <xacro:property name="hq" value="true" />
-    
-	
-	<xacro:arg name="prefix" default="summit_xl_"/>
-	<xacro:arg name="ros_planar_move_plugin" default="true"/>
-	<xacro:arg name="ros_planar_move_plugin_force_based" default="true"/>
-	<xacro:arg name="gpu" default="true"/>
-
-
-    <xacro:macro name="summit_xl" params="prefix publish_bf hq">
-
-		<!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
-		<xacro:summit_xls_base prefix="$(arg prefix)" publish_bf="true" hq="${hq}" />
-
-		<xacro:omni_wheel prefix="$(arg prefix)front_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
-			<origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-		</xacro:omni_wheel>
-		<xacro:omni_wheel prefix="$(arg prefix)front_left" parent="$(arg prefix)base_link" reflect="true" hq="${hq}">
-			<origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-		</xacro:omni_wheel>
-		<xacro:omni_wheel prefix="$(arg prefix)back_left" parent="$(arg prefix)base_link" reflect="true" hq="${hq}">
-			<origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-		</xacro:omni_wheel>
-		<xacro:omni_wheel prefix="$(arg prefix)back_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
-			<origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-		</xacro:omni_wheel>     
-    </xacro:macro>
-        
-    <!-- Robot Assembling -->   
-    <xacro:summit_xl prefix="$(arg prefix)" publish_bf="true" hq="true"/>
-    
-    <!-- ********************************************************************************************************************************************* -->
-    <!-- ********************************************************************************************************************************************* -->
-    <!-- ********************************************************************************************************************************************* -->
-    
-    <!-- Here I should add UR10e arm -->
+    <xacro:include filename="$(find iliad)/urdf/summit_macro.xacro"/>
     <xacro:include filename="$(find iliad)/urdf/ur_macro.xacro"/>
-    <xacro:arg name="robot_model" default="ur10e" />
-    <!--Parameter files -->
-    <xacro:arg name="joint_limit_params" default="$(find ur_description)/config/ur10e/joint_limits.yaml"/>
-    <xacro:arg name="kinematics_params" default="$(find ur_description)/config/ur10e/default_kinematics.yaml"/>
-    <xacro:arg name="physical_params" default="$(find ur_description)/config/ur10e/physical_parameters.yaml"/>
-    <xacro:arg name="visual_params" default="$(find ur_description)/config/ur10e/visual_parameters.yaml"/>
-
-    <!--Common parameters -->
-    <xacro:arg name="transmission_hw_interface" default="hardware_interface/EffortJointInterface" doc="The hardware_interface to expose for each joint in the simulated robot (one of: [PositionJointInterface, VelocityJointInterface, EffortJointInterface])"/>
-    <xacro:arg name="safety_limits" default="false" doc="If True, enable the safety limits controller"/>
-    <xacro:arg name="safety_pos_margin" default="0.15" doc="The lower/upper limits in the safety controller" />
-    <xacro:arg name="safety_k_position" default="20" doc="Used to set k position in the safety controller" />
-
-    <!-- Instantiate the Gazebo robot and pass it all the required arguments. -->
-    <xacro:ur_robot_gazebo
-        prefix="ur_"
-        joint_limits_parameters_file="$(arg joint_limit_params)"
-        kinematics_parameters_file="$(arg kinematics_params)"
-        physical_parameters_file="$(arg physical_params)"
-        visual_parameters_file="$(arg visual_params)"
-        transmission_hw_interface="$(arg transmission_hw_interface)"
-        safety_limits="$(arg safety_limits)"
-        safety_pos_margin="$(arg safety_pos_margin)"
-        safety_k_position="$(arg safety_k_position)"
-    />
+    <xacro:include filename="$(find iliad)/urdf/franka_robot.xacro"/>
     
-    <joint name="summit_tu_ur10e" type="fixed">
-        <parent link="robot_base_chapa"/>
-        <child link="ur_base_link"/>
-        <origin xyz="0.24 0.18 0" rpy="0 0 0"/>
+    <!-- Robot Assembling   --> 
+    <xacro:summit_xls_macro prefix="$(arg summit_prefix)" publish_bf="true" hq="true"/>
+
+    <xacro:ur_robot_gazebo prefix="$(arg ur10e_prefix)"/>
+    
+    <joint name="summit_to_ur10e" type="fixed">
+        <parent link="$(arg summit_prefix)base_chapa"/>
+        <child  link="$(arg ur10e_prefix)base_link"/>
+        <origin xyz="$(arg ur10e_base_x) $(arg ur10e_base_y) $(arg ur10e_base_z)" 
+                rpy="$(arg ur10e_base_roll) $(arg ur10e_base_pitch) $(arg ur10e_base_yaw)"/>
     </joint>
-<!--
+    <!--
     <link name="tool0_controller"/>
     <joint name="tool_controller_fake_joint" type="fixed">
     <parent link="tool0"/>
@@ -95,27 +41,18 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>-->
     
+    <xacro:franka_robot arm_id="$(arg panda_prefix)" joint_limits="${xacro.load_yaml('$(find iliad)/robots/joint_limits.yaml')}"/>
+    
+    <joint name="$summit_to_panda" type="fixed">
+        <parent link="$(arg summit_prefix)base_chapa"/>
+        <child  link="$(arg panda_prefix)_link0"/>
+        <origin xyz="$(arg panda_base_x) $(arg panda_base_y) $(arg panda_base_z)" 
+                rpy="$(arg panda_base_roll) $(arg panda_base_pitch) $(arg panda_base_yaw)" />
+    </joint>
+    
     <!-- ********************************************************************************************************************************************* -->
-    <!-- ********************************************************************************************************************************************* -->
-    <!-- ********************************************************************************************************************************************* -->
-    
-   <!-- Here I should add Franka Panda arm 
-   <xacro:panda connected_to="" xyz="" rpy="" />-->
 
-   <xacro:include filename="$(find iliad)/urdf/franka_robot.xacro"/>
-
-    <xacro:arg name="arm_id" default="panda" />
-
-    <xacro:franka_robot arm_id="$(arg arm_id)"
-                        joint_limits="${xacro.load_yaml('$(find iliad)/robots/joint_limits.yaml')}">
-    </xacro:franka_robot>
-   
-    
-    
-    
-    
-    
-   <!-- ROS Plugins -->
+    <!-- ROS Plugins -->
     <gazebo>
         <plugin name="ros_control" filename="libgazebo_ros_control.so">
             <robotParam>robot_description</robotParam>
@@ -125,11 +62,14 @@
             <legacyModeNS>true</legacyModeNS>
         </plugin>
     </gazebo>
-     <!--
-   <xacro:if value="$(arg ros_planar_move_plugin)">
-	   <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true" force_based="$(arg ros_planar_move_plugin_force_based)"/>
-   </xacro:if>-->
-   
-
-
+     
+    <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_base.gazebo.xacro" />
+    <xacro:arg name="ros_planar_move_plugin" default="true"/>
+	<xacro:arg name="ros_planar_move_plugin_force_based" default="true"/>
+    <!-- <xacro:arg name="gpu" default="true"/> 
+    
+    <xacro:if value="$(arg ros_planar_move_plugin)">
+        <xacro:omni_steering prefix="$(arg summit_prefix)" publish_tf="true" force_based="$(arg ros_planar_move_plugin_force_based)"/>
+    </xacro:if>
+    -->
 </robot>
