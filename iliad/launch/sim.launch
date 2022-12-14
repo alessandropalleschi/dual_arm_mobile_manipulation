@@ -3,18 +3,18 @@
     <!-- Model of the robot -->
     <arg name="robot_model" value="$(find iliad)/urdf/iliad.urdf.xacro"/>
     
-    <arg name="panda_base_x"     default="0.22"/>
-    <arg name="panda_base_y"     default="-0.15"/>
-    <arg name="panda_base_z"     default="0.00"/>
-    <arg name="panda_base_roll"  default="0"/>
-    <arg name="panda_base_pitch" default="0"/>
-    <arg name="panda_base_yaw"   default="0"/>
-    <arg name="ur10e_base_x"     default="0.24"/>
-    <arg name="ur10e_base_y"     default="0.18"/>
-    <arg name="ur10e_base_z"     default="0.00"/>
-    <arg name="ur10e_base_roll"  default="0"/>
-    <arg name="ur10e_base_pitch" default="0"/>
-    <arg name="ur10e_base_yaw"   default="0"/>
+    <arg name="panda_base_x"     default="0.25"/>
+    <arg name="panda_base_y"     default="-0.22"/>
+    <arg name="panda_base_z"     default="0.15"/>
+    <arg name="panda_base_roll"  default="0.00"/>
+    <arg name="panda_base_pitch" default="0.785"/>  <!-- pi/4=0.785 -->
+    <arg name="panda_base_yaw"   default="0.00"/>
+    <arg name="ur10e_base_x"     default="0.35"/>
+    <arg name="ur10e_base_y"     default="0.32"/>
+    <arg name="ur10e_base_z"     default="0.05"/>
+    <arg name="ur10e_base_roll"  default="0.00"/>
+    <arg name="ur10e_base_pitch" default="0.00"/>
+    <arg name="ur10e_base_yaw"   default="0.00"/>
     
     <!-- RViz Configuration -->
     <arg name="rvizconfig" value="$(find iliad)/rviz/iliad_rviz.rviz" />
