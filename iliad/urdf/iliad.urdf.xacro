@@ -33,13 +33,14 @@
         <origin xyz="$(arg ur10e_base_x) $(arg ur10e_base_y) $(arg ur10e_base_z)" 
                 rpy="$(arg ur10e_base_roll) $(arg ur10e_base_pitch) $(arg ur10e_base_yaw)"/>
     </joint>
-    <!--
-    <link name="tool0_controller"/>
-    <joint name="tool_controller_fake_joint" type="fixed">
-    <parent link="tool0"/>
-    <child link="tool0_controller"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>-->
+     <!----> 
+   <xacro:include filename="$(find iliad)/urdf/velvet.urdf.xacro"/>
+
+    <xacro:model_velvet parent="ur10e_tool0" name="velvet">
+        
+        <origin xyz="0 0 0.14" rpy="0 0 0"/>           
+    </xacro:model_velvet>
+      
     
     <xacro:franka_robot arm_id="$(arg panda_prefix)" joint_limits="${xacro.load_yaml('$(find iliad)/robots/joint_limits.yaml')}"/>
     
@@ -48,16 +49,55 @@
         <child  link="$(arg panda_prefix)_link0"/>
         <origin xyz="$(arg panda_base_x) $(arg panda_base_y) $(arg panda_base_z)" 
                 rpy="$(arg panda_base_roll) $(arg panda_base_pitch) $(arg panda_base_yaw)" />
+    </joint>   
+    
+    <!--
+    <xacro:include filename="$(find softhands_description)/urdf/softhands.xacro"/>
+    
+    <xacro:softhands type="right" 
+        version = "v1.0_simple"
+        parent = "$(arg panda_prefix)_link8"
+        position ="0.05 -0.05 0.04"
+        orientation ="0 -1.57 2.355" 
+        operation_mode = "0"
+        translation="0.0">
+    </xacro:softhands>
+    
+    <link name="flange">
+        <visual>
+            <geometry>
+                <box size="0.10 0.06 0.08"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0.02 0 0"/>
+            <material name="grey">
+                <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.10 0.06 0.08"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0.02 0 0"/>
+        </collision>
+        <inertial>
+            <mass value="0.300"/>
+            <inertia ixx="0.00025" ixy="0.0" ixz="0.0" iyy="0.00041" iyz="0.0" izz="0.00034"/>
+        </inertial>
+    </link>
+    
+    <joint name="panda_link8_to_hand" type="fixed">
+        <parent link="$(arg panda_prefix)_link8"/>
+        <child link="flange"/>
+        <origin rpy="0 0 -0.785" xyz="0 0 0.04"/>
     </joint>
-    
-    
+    -->
     <link name="controller_unit">
         <visual>
             <geometry>
                 <box size="0.2 0.4 0.3"/>
             </geometry>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <material name="white">
+            <material name="grey">
                 <color rgba="0.5 0.5 0.5 1"/>
             </material>
         </visual>
@@ -69,7 +109,7 @@
         </collision>
         <inertial>
             <mass value="20"/>
-            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+            <inertia ixx="0.41666667" ixy="0.0" ixz="0.0" iyy="0.21666667" iyz="0.0" izz="0.33333333"/>
         </inertial>
     </link>
     
@@ -79,7 +119,7 @@
         <origin xyz="-0.25 0 0.15"/>
     </joint>
     
-    <!-- ********************************************************************************************************************************************* -->
+     <!--********************************************************************************************************************************************* -->
 
     <!-- ROS Plugins -->
     <gazebo>
