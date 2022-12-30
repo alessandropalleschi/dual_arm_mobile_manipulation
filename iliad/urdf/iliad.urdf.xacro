@@ -51,9 +51,9 @@
                 rpy="$(arg panda_base_roll) $(arg panda_base_pitch) $(arg panda_base_yaw)" />
     </joint>   
     
-    <!--
-    <xacro:include filename="$(find softhands_description)/urdf/softhands.xacro"/>
     
+    <xacro:include filename="$(find softhands_description)/urdf/softhands.xacro"/>
+    <!---->
     <xacro:softhands type="right" 
         version = "v1.0_simple"
         parent = "$(arg panda_prefix)_link8"
@@ -90,7 +90,7 @@
         <child link="flange"/>
         <origin rpy="0 0 -0.785" xyz="0 0 0.04"/>
     </joint>
-    -->
+    <!---->
     <link name="controller_unit">
         <visual>
             <geometry>
@@ -117,6 +117,32 @@
         <parent link="$(arg summit_prefix)base_chapa"/>
         <child link="controller_unit"/>
         <origin xyz="-0.25 0 0.15"/>
+    </joint>
+    
+    <material name="steel">
+        <color rgba="0 0 0 1.0"/> <!-- rviz green color -->
+    </material>
+    
+    <link name="arms_base">
+        <visual>
+            <geometry>
+                <mesh filename="package://iliad/meshes/arm_base.stl"/>
+            </geometry>      
+            <material name="steel"/>
+        </visual>
+    </link>
+    
+    <gazebo reference="arms_base"> 
+        <material>Gazebo/Grey</material>
+    </gazebo>
+    <gazebo reference="controller_unit"> 
+        <material>Gazebo/Grey</material>
+    </gazebo>
+    
+    <joint name="summit_to_arms_base" type="fixed">
+        <parent link="$(arg summit_prefix)base_chapa"/>
+        <child link="arms_base"/>
+        <origin xyz="0.135 0.410 0" rpy="0 0 -1.57079632679"/>
     </joint>
     
      <!--********************************************************************************************************************************************* -->
