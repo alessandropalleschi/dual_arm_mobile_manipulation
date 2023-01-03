@@ -24,7 +24,7 @@
     
     <!-- Robot Assembling   --> 
     <xacro:summit_xls_macro prefix="$(arg summit_prefix)" publish_bf="true" hq="true"/>
-
+ <!---->
     <xacro:ur_robot_gazebo prefix="$(arg ur10e_prefix)"/>
     
     <joint name="summit_to_ur10e" type="fixed">
@@ -33,7 +33,7 @@
         <origin xyz="$(arg ur10e_base_x) $(arg ur10e_base_y) $(arg ur10e_base_z)" 
                 rpy="$(arg ur10e_base_roll) $(arg ur10e_base_pitch) $(arg ur10e_base_yaw)"/>
     </joint>
-     <!----> 
+     
    <xacro:include filename="$(find iliad)/urdf/velvet.urdf.xacro"/>
 
     <xacro:model_velvet parent="ur10e_tool0" name="velvet">
@@ -53,7 +53,7 @@
     
     
     <xacro:include filename="$(find softhands_description)/urdf/softhands.xacro"/>
-    <!---->
+    
     <xacro:softhands type="right" 
         version = "v1.0_simple"
         parent = "$(arg panda_prefix)_link8"
@@ -90,33 +90,89 @@
         <child link="flange"/>
         <origin rpy="0 0 -0.785" xyz="0 0 0.04"/>
     </joint>
-    <!---->
+    
     <link name="controller_unit">
         <visual>
             <geometry>
-                <box size="0.2 0.4 0.3"/>
+                <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
             </geometry>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
             <material name="grey">
                 <color rgba="0.5 0.5 0.5 1"/>
             </material>
         </visual>
         <collision>
             <geometry>
-                <box size="0.2 0.4 0.30"/>
+                <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
             </geometry>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
         </collision>
         <inertial>
-            <mass value="20"/>
-            <inertia ixx="0.41666667" ixy="0.0" ixz="0.0" iyy="0.21666667" iyz="0.0" izz="0.33333333"/>
+            <mass value="12"/>   <!-- franka 7kg, ur10e 5kg-->
+            <inertia ixx="0.2741" ixy="0.0" ixz="0.0" iyy="0.125" iyz="0.0" izz="0.2741"/>
         </inertial>
     </link>
     
     <joint name="summit_to_controller_unit" type="fixed">
         <parent link="$(arg summit_prefix)base_chapa"/>
         <child link="controller_unit"/>
-        <origin xyz="-0.25 0 0.15"/>
+        <origin xyz="-0.175 0 0"/>
+    </joint>
+    
+    <link name="franka_controller_unit_plate">
+        <visual>
+            <geometry>
+                <mesh filename="package://iliad/meshes/franka_controller_box_plate.stl"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+            <material name="grey">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://iliad/meshes/franka_controller_box_plate.stl"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+        </collision>
+        <inertial>
+            <mass value="0"/>
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        </inertial>
+    </link>
+    
+    <joint name="controller_unit_TO_franka_plate" type="fixed">
+        <parent link="$(arg summit_prefix)base_chapa"/>
+        <child link="franka_controller_unit_plate"/>
+        <origin xyz="-0.259 0 0.351"/>
+    </joint>
+    
+    <link name="ur_controller_unit_plate">
+        <visual>
+            <geometry>
+                <mesh filename="package://iliad/meshes/ur_controller_box_plate.stl"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+            <material name="grey">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://iliad/meshes/ur_controller_box_plate.stl"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+        </collision>
+        <inertial>
+            <mass value="0"/>
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        </inertial>
+    </link>
+    
+    <joint name="controller_unit_TO_ur_plate" type="fixed">
+        <parent link="$(arg summit_prefix)base_chapa"/>
+        <child link="ur_controller_unit_plate"/>
+        <origin xyz="-0.1305 0 0.164"/>
     </joint>
     
     <material name="steel">
@@ -130,6 +186,15 @@
             </geometry>      
             <material name="steel"/>
         </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://iliad/meshes/arm_base.stl"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="2"/>   <!-- -->
+            <inertia ixx="0.2741" ixy="0.0" ixz="0.0" iyy="0.125" iyz="0.0" izz="0.2741"/>
+        </inertial>
     </link>
     
     <gazebo reference="arms_base"> 
@@ -138,6 +203,16 @@
     <gazebo reference="controller_unit"> 
         <material>Gazebo/Grey</material>
     </gazebo>
+    
+    <!---->
+
+    <gazebo reference="franka_controller_unit_plate"> 
+        <material>Gazebo/Black</material>
+    </gazebo>
+    <gazebo reference="ur_controller_unit_plate"> 
+        <material>Gazebo/Black</material>
+    </gazebo>
+    
     
     <joint name="summit_to_arms_base" type="fixed">
         <parent link="$(arg summit_prefix)base_chapa"/>

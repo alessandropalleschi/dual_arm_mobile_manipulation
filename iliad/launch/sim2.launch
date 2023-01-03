@@ -1,7 +1,7 @@
 <launch>
     
     <!-- Model of the robot -->
-    <arg name="robot_model" value="$(find iliad)/urdf/iliad.urdf.xacro"/>
+    <arg name="robot_model" value="$(find iliad)/urdf/iliad2.urdf.xacro"/>
     
     <arg name="panda_base_x"     default="0.25"/>
     <arg name="panda_base_y"     default="-0.22"/>
@@ -29,7 +29,7 @@
 
     <!-- Open Gazebo World -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find iliad)/world/pallet_world.world"/> <!-- -->
+        <arg name="world_name" value="$(find iliad)/world/pallet_world.world"/>
         <arg name="paused" value="$(arg gazebo_paused)"/>
         <arg name="use_sim_time" value="$(arg gazebo_use_sim_time)"/>
         <arg name="gui" value="$(arg gazebo_gui)" />
@@ -44,7 +44,7 @@
         
     <arg name="ros_planar_move_plugin" default="false"/>
     
-    <!-- Load robot model in ROS parameter server -->
+    <!-- Load robot model in ROS parameter server 
     <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'
         panda_base_x:=$(arg panda_base_x)
         panda_base_y:=$(arg panda_base_y)  
@@ -65,67 +65,53 @@
 
         ros_planar_move_plugin:=$(arg ros_planar_move_plugin)"
         />
+    -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'"
+        />
     
-    <!-- push robot_description to factory and spawn robot in gazebo -->
-        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
-        args="-unpause -urdf -model iliad -param robot_description" respawn="false" output="screen" />
-        
-        
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0"/>
+    
+    <!-- push robot_description to factory and spawn robot in gazebo 
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model iliad -param robot_description" respawn="false" output="screen" />
+    
+    <node name="urdf_spawner1" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box1 -param robot_description -x $(arg x) -y $(arg y) -z $(arg z)" respawn="false" output="screen" /> -->
+    
+    
+    
+    <!--
+    <node name="urdf_spawner1" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box1 -param robot_description -x 0 -y 0 -z 0" respawn="false" output="screen" /> 
+    
+    <node name="urdf_spawner2" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box2 -param robot_description -x 0 -y 0 -z 0.01" respawn="false" output="screen" />
+    
+    <node name="urdf_spawner3" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box3 -param robot_description -x 0 -y 0.4 -z 0" respawn="false" output="screen" />  
+    
+    <node name="urdf_spawner4" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box4 -param robot_description -x 0 -y 0.4 -z 0.01" respawn="false" output="screen" />  
+    
+    <node name="urdf_spawner5" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box5 -param robot_description -x 0 -y 0 -z 0.402" respawn="false" output="screen" />  
+    
+    
+    <node name="urdf_spawner6" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box6 -param robot_description -x 0 -y 0.4 -z 0.402" respawn="false" output="screen" />  
+    -->
+    
+    <node name="urdf_spawner7" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model box7 -param robot_description -x 2 -y 0 -z 0" respawn="false" output="screen" />
+    
     <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
         <param name="publish_frequency" type="double" value="500.0" />
     </node>
 
-    <rosparam command="load"
-            file="$(find iliad)/config/joints.yaml"
-            ns="iliad_joint_state_controller" />      
-    
-    <node name="iliad_joint_state_spawner" pkg="controller_manager" type="spawner"
-        args="iliad_joint_state_controller"/>
-    
-    
-    <!--USE ROS PLANAR PLUGIN -->
-    <group if="$(arg ros_planar_move_plugin)">
-        <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-            <param name="default_topic" value="/robotnik_base_control/cmd_vel"/>
-        </node>
-    </group>
-    
-    <group unless="$(arg ros_planar_move_plugin)">
-       <rosparam command="load"
-                file="$(find iliad)/config/diffdrive.yaml"
-                ns="summit_diff_drive_controller" />
-        <node name="iliad_controller_spawner" pkg="controller_manager" type="spawner"
-        args="summit_diff_drive_controller"/>
-        <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-            <param name="default_topic" value="/summit_diff_drive_controller/cmd_vel"/>
-        </node>
-    </group>   
-    
-    <rosparam command="load"
-            file="$(find iliad)/config/ur10e_controllers.yaml"/>
-    
-    <node name="ur10e_controller_spawner" pkg="controller_manager" type="spawner"
-    args="ur10e_shoulder_pan_joint_position_controller 
-          ur10e_shoulder_lift_joint_position_controller 
-          ur10e_elbow_joint_position_controller
-          ur10e_wrist_1_joint_position_controller
-          ur10e_wrist_2_joint_position_controller
-          ur10e_wrist_3_joint_position_controller"
-    output="screen" respawn="false" />
-    
-    <rosparam command="load"
-            file="$(find iliad)/config/panda_controllers.yaml"/>
-    
-    <node name="panda_controller_spawner" pkg="controller_manager" type="spawner"
-    args="panda_joint1_position_controller 
-          panda_joint2_position_controller 
-          panda_joint3_position_controller
-          panda_joint4_position_controller
-          panda_joint5_position_controller
-          panda_joint6_position_controller
-          panda_joint7_position_controller"
-    output="screen" respawn="false" />
-        
-    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />   
+
+     <!--   
+    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />   -->
 
 </launch>

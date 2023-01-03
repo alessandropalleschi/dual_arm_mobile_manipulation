@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<robot name="iliad" xmlns:xacro="http://wiki.ros.org/xacro">
+        
+    <!--
+    
+    <link name="controller_unit">
+        <visual>
+            <geometry>
+                <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
+            <material name="grey">
+                <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
+        </collision>
+        <inertial>
+            <mass value="12"/> 
+            <inertia ixx="0.2741" ixy="0.0" ixz="0.0" iyy="0.125" iyz="0.0" izz="0.2741"/>
+            <origin rpy="0 0 0" xyz="0 0 0.13"/>
+        </inertial>
+    </link>
+    
+    
+    <gazebo reference="controller_unit"> 
+        <material>Gazebo/Grey</material>
+    </gazebo>
+    -->
+    
+    
+     <link name="box1">
+        <visual>
+            <geometry>
+                <box size="0.3 0.4 0.2"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0.1"/>
+            <material name="grey">
+                <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.3 0.4 0.2"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0.1"/>
+        </collision>
+        <inertial>
+            <mass value="2"/>
+            <inertia ixx="0.033333" ixy="0.0" ixz="0.0" iyy="0.0216667" iyz="0.0" izz="0.04166667"/>
+            <origin rpy="0 0 0" xyz="0 0 0.1"/>
+        </inertial>
+    </link>
+    
+    <!---->
+    <gazebo reference="box1"> 
+        <material>Gazebo/Grey</material>
+        <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <min_depth value ="0.2"/>
+    </gazebo>  
+    
+</robot>
