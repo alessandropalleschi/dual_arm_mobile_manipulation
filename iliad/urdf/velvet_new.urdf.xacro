@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:property name="box_x" value="0.14"/>
+<xacro:property name="box_y" value="0.08"/>
+<xacro:property name="box_z" value="0.28"/>
+<xacro:property name="box_dim" value="${box_x} ${box_y} ${box_z}"/> 
+<xacro:property name="mass" value="2"/> 
+
+<xacro:property name="velvet_mass" value="${100*gr_to_Kg}"/> 
+
+<xacro:macro name="model_velvet" params="parent name *origin">
+  
+    <joint name="${parent}_${name}_base_joint" type="fixed">
+        <xacro:insert_block name="origin"/>
+        <parent link="${parent}"/>
+        <child link="${name}_link"/>
+    </joint>
+    
+    <link name="${name}_link">
+        <visual>
+      <geometry>
+        <mesh filename="package://iliad/meshes/gazebo_assieme.stl"/>
+      </geometry>      
+      <color rgba="1.0 0.0 0.0 1.0"/>
+    </visual>
+    <inertial>
+        <origin xyz="0 0 0"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${mass/12*(box_y*box_y+box_z*box_z)}" ixy="0.0" ixz="0.0" iyy="${mass/12*(box_x*box_x+box_z*box_z)}" iyz="0.0" izz="${mass/12*(box_x*box_x+box_y*box_y)}"/>
+    </inertial>
+    <collision>
+      <geometry>
+           <box size="${box_dim}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    </link>
+
+  <gazebo reference="${name}_link">
+     <!--<static>true</static> -->
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="1e+13" />
+    <kd value="1.0" />
+    
+    <collision>
+      <surface>
+        <contact>
+          <ode>
+            <min_depth>0.01</min_depth>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    
+  </gazebo>
+
+</xacro:macro>
+
+</robot>
