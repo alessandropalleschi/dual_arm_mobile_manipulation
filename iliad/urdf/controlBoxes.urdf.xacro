@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="ctr_box_x" value="0.25"/>
+    <xacro:property name="ctr_box_y" value="0.46"/>
+    <xacro:property name="ctr_box_z" value="0.25"/>
+    <xacro:property name="ctr_box_dim" value="${ctr_box_x} ${ctr_box_y} ${ctr_box_z}"/> 
+    <xacro:property name="ctr_mass" value="12"/> 
+
+    <xacro:macro name="controlBoxes_macro" params="parent name *origin">
+        
+        <link name="controller_unit">
+            <visual>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
+                <material name="grey">
+                    <color rgba="0.5 0.5 0.5 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
+            </collision>
+            <inertial>
+                <mass value="${ctr_mass}"/>
+                <inertia ixx="${ctr_mass/12*(ctr_box_y*ctr_box_y+ctr_box_z*ctr_box_z)}" ixy="0.0" ixz="0.0" iyy="${ctr_mass/12*(ctr_box_x*ctr_box_x+ctr_box_z*ctr_box_z)}" iyz="0.0" izz="${ctr_mass/12*(ctr_box_x*ctr_box_x+ctr_box_y*ctr_box_y)}"/>
+                <origin rpy="0 0 0" xyz="0 0 0.13"/>
+            </inertial>
+        </link>
+  
+        <joint name="${parent}_to_${name}" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+            <xacro:insert_block name="origin"/>
+        </joint>
+
+        
+        <link name="franka_controller_unit_plate">
+            <visual>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/franka_controller_box_plate.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+                <material name="black">
+                    <color rgba="0 0 0 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/franka_controller_box_plate.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+            </collision>
+            <inertial>
+                <mass value="0"/>
+                <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+            </inertial>
+        </link>
+        
+        <joint name="controller_unit_TO_franka_plate" type="fixed">
+            <parent link="$(arg summit_prefix)base_chapa"/>
+            <child link="franka_controller_unit_plate"/>
+            <origin xyz="-0.259 0 0.351"/>
+        </joint>
+        
+        <link name="ur_controller_unit_plate">
+            <visual>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/ur_controller_box_plate.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+                <material name="black">
+                    <color rgba="0 0 0 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/ur_controller_box_plate.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
+            </collision>
+            <inertial>
+                <mass value="0"/>
+                <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+            </inertial>
+        </link>
+        
+        <joint name="controller_unit_TO_ur_plate" type="fixed">
+            <parent link="$(arg summit_prefix)base_chapa"/>
+            <child link="ur_controller_unit_plate"/>
+            <origin xyz="-0.1305 0 0.164"/>
+        </joint>
+        
+        <gazebo reference="controller_unit"> 
+            <material>Gazebo/Grey</material>
+        </gazebo>
+        <gazebo reference="franka_controller_unit_plate"> 
+            <material>Gazebo/Black</material>
+        </gazebo>
+        <gazebo reference="ur_controller_unit_plate"> 
+            <material>Gazebo/Black</material>
+        </gazebo>
+        
+    </xacro:macro>
+
+</robot>
+    
+
+    
+
+    
+
+    
+
+

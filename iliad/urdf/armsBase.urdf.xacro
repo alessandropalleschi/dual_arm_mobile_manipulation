@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:property name="arb_box_x" value="0.2"/>
+<xacro:property name="arb_box_y" value="0.57"/>
+<xacro:property name="arb_box_z" value="0.1"/>
+<xacro:property name="arb_box_dim" value="${arb_box_x} ${arb_box_y} ${arb_box_z}"/> 
+<xacro:property name="arb_mass" value="2"/> 
+
+<xacro:macro name="armsBase_macro" params="parent name *origin">
+  
+    <link name="arms_base">
+            <visual>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/arm_base.stl"/>
+                </geometry>
+                <origin xyz="-0.135 0.410 0" rpy="0 0 -1.57079632679"/>  
+                <material name="grey">
+                    <color rgba="0.5 0.5 0.5 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/arm_base.stl"/>
+                </geometry>
+                <origin xyz="-0.135 0.410 0" rpy="0 0 -1.57079632679"/> 
+            </collision>
+            <inertial>
+                <mass value="${arb_mass}"/>
+                <inertia ixx="${arb_mass/12*(arb_box_y*arb_box_y+arb_box_z*arb_box_z)}" ixy="0.0" ixz="0.0" iyy="${arb_mass/12*(arb_box_x*arb_box_x+arb_box_z*arb_box_z)}" iyz="0.0" izz="${arb_mass/12*(arb_box_x*arb_box_x+arb_box_y*arb_box_y)}"/>
+                <origin xyz="0 0 0.05" rpy="0 0 0"/>  
+            </inertial>
+        </link>
+  
+        <joint name="${parent}_to_${name}" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+            <xacro:insert_block name="origin"/>
+        </joint>
+    
+        <gazebo reference="arms_base"> 
+            <material>Gazebo/Grey</material>
+        </gazebo>
+    
+</xacro:macro>
+
+</robot>
+    
+ 
+    
+    
+
+

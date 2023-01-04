@@ -21,10 +21,36 @@
     <xacro:include filename="$(find iliad)/urdf/summit_macro.xacro"/>
     <xacro:include filename="$(find iliad)/urdf/ur_macro.xacro"/>
     <xacro:include filename="$(find iliad)/urdf/franka_robot.xacro"/>
-    
+    <xacro:include filename="$(find iliad)/urdf/velvet_new.urdf.xacro"/>
+    <xacro:include filename="$(find softhands_description)/urdf/softhands.xacro"/>
+    <xacro:include filename="$(find iliad)/urdf/controlBoxes.urdf.xacro"/>
+    <xacro:include filename="$(find iliad)/urdf/armsBase.urdf.xacro"/>
+    <xacro:include filename="$(find iliad)/urdf/flange.urdf.xacro"/>    
+
     <!-- Robot Assembling   --> 
+    <!-- The ILIAD Robot is composed by:
+            - Summit XLS Steel
+            - UR10e Manipulator
+            - Franka Emika Panda Simulator
+            - Controller Boxes of manipulators
+            - A steel plate to connect Summit XLS to each manipulator
+            - A Customized velvet tray (UR10e end effector)
+            - A SoftHand (Franka end effector)
+            - A flange to connect the last Franka's link to the Softhand
+    --> 
+    
+    
     <xacro:summit_xls_macro prefix="$(arg summit_prefix)" publish_bf="true" hq="true"/>
- <!---->
+    
+    <xacro:controlBoxes_macro parent="$(arg summit_prefix)base_chapa" name="controller_unit">
+        <origin rpy="0 0 0" xyz="-0.175 0 0"/>         
+    </xacro:controlBoxes_macro>
+    
+    <xacro:armsBase_macro parent="$(arg summit_prefix)base_chapa" name="arms_base">
+        <origin xyz="0.270 0 0" rpy="0 0 0"/>        
+    </xacro:armsBase_macro>
+    
+    
     <xacro:ur_robot_gazebo prefix="$(arg ur10e_prefix)"/>
     
     <joint name="summit_to_ur10e" type="fixed">
@@ -33,13 +59,10 @@
         <origin xyz="$(arg ur10e_base_x) $(arg ur10e_base_y) $(arg ur10e_base_z)" 
                 rpy="$(arg ur10e_base_roll) $(arg ur10e_base_pitch) $(arg ur10e_base_yaw)"/>
     </joint>
-    
-     <xacro:include filename="$(find iliad)/urdf/velvet_new.urdf.xacro"/>
 
-    <xacro:model_velvet parent="ur10e_tool0" name="velvet">
+    <xacro:velvet_macro parent="ur10e_tool0" name="velvet">
         <origin xyz="0 0 0.14" rpy="0 0 0"/>           
-    </xacro:model_velvet>
-    
+    </xacro:velvet_macro>
     
     <xacro:franka_robot arm_id="$(arg panda_prefix)" joint_limits="${xacro.load_yaml('$(find iliad)/robots/joint_limits.yaml')}"/>
     
@@ -49,10 +72,11 @@
         <origin xyz="$(arg panda_base_x) $(arg panda_base_y) $(arg panda_base_z)" 
                 rpy="$(arg panda_base_roll) $(arg panda_base_pitch) $(arg panda_base_yaw)" />
     </joint>   
-    
-    
-    <xacro:include filename="$(find softhands_description)/urdf/softhands.xacro"/>
-    
+   
+    <xacro:flange_macro parent="$(arg panda_prefix)_link8" name="flange">
+        <origin rpy="0 0 -0.785" xyz="0 0 0.04"/>         
+    </xacro:flange_macro>
+     
     <xacro:softhands type="right" 
         version = "v1.0_simple"
         parent = "$(arg panda_prefix)_link8"
@@ -61,167 +85,9 @@
         operation_mode = "0"
         translation="0.0">
     </xacro:softhands>
+  
     
-  <link name="flange">
-        <visual>
-            <geometry>
-                <box size="0.10 0.06 0.08"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="0.02 0 0"/>
-            <material name="grey">
-                <color rgba="0.5 0.5 0.5 1"/>
-            </material>
-        </visual>
-        <collision>
-            <geometry>
-                <box size="0.10 0.06 0.08"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="0.02 0 0"/>
-        </collision>
-        <inertial>
-            <mass value="0.300"/>
-            <inertia ixx="0.00025" ixy="0.0" ixz="0.0" iyy="0.00041" iyz="0.0" izz="0.00034"/>
-            <origin rpy="0 0 0" xyz="0.02 0 0"/>
-        </inertial>
-    </link>
-    
-    <joint name="panda_link8_to_hand" type="fixed">
-        <parent link="$(arg panda_prefix)_link8"/>
-        <child link="flange"/>
-        <origin rpy="0 0 -0.785" xyz="0 0 0.04"/>
-    </joint>
-    
-    <link name="controller_unit">
-        <visual>
-            <geometry>
-                <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
-            <material name="grey">
-                <color rgba="0.5 0.5 0.5 1"/>
-            </material>
-        </visual>
-        <collision>
-            <geometry>
-                <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
-        </collision>
-        <inertial>
-            <mass value="12"/>   <!-- franka 7kg, ur10e 5kg-->
-            <inertia ixx="0.2741" ixy="0.0" ixz="0.0" iyy="0.125" iyz="0.0" izz="0.2741"/>
-            <origin rpy="0 0 0" xyz="0 0 0.13"/>
-        </inertial>
-    </link>
-    
-    <joint name="summit_to_controller_unit" type="fixed">
-        <parent link="$(arg summit_prefix)base_chapa"/>
-        <child link="controller_unit"/>
-        <origin xyz="-0.175 0 0"/>
-    </joint>
-    
-    <link name="franka_controller_unit_plate">
-        <visual>
-            <geometry>
-                <mesh filename="package://iliad/meshes/franka_controller_box_plate.stl"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
-            <material name="grey">
-                <color rgba="1 1 1 1"/>
-            </material>
-        </visual>
-        <collision>
-            <geometry>
-                <mesh filename="package://iliad/meshes/franka_controller_box_plate.stl"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
-        </collision>
-        <inertial>
-            <mass value="0"/>
-            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-        </inertial>
-    </link>
-    
-    <joint name="controller_unit_TO_franka_plate" type="fixed">
-        <parent link="$(arg summit_prefix)base_chapa"/>
-        <child link="franka_controller_unit_plate"/>
-        <origin xyz="-0.259 0 0.351"/>
-    </joint>
-    
-    <link name="ur_controller_unit_plate">
-        <visual>
-            <geometry>
-                <mesh filename="package://iliad/meshes/ur_controller_box_plate.stl"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
-            <material name="grey">
-                <color rgba="1 1 1 1"/>
-            </material>
-        </visual>
-        <collision>
-            <geometry>
-                <mesh filename="package://iliad/meshes/ur_controller_box_plate.stl"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="-0.0175 -0.19 0"/>
-        </collision>
-        <inertial>
-            <mass value="0"/>
-            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-        </inertial>
-    </link>
-    
-    <joint name="controller_unit_TO_ur_plate" type="fixed">
-        <parent link="$(arg summit_prefix)base_chapa"/>
-        <child link="ur_controller_unit_plate"/>
-        <origin xyz="-0.1305 0 0.164"/>
-    </joint>
-    
-    <material name="steel">
-        <color rgba="0 0 0 1.0"/> <!-- rviz green color -->
-    </material>
-    
-    <link name="arms_base">
-        <visual>
-            <geometry>
-                <mesh filename="package://iliad/meshes/arm_base.stl"/>
-            </geometry>      
-            <material name="steel"/>
-        </visual>
-        <collision>
-            <geometry>
-                <mesh filename="package://iliad/meshes/arm_base.stl"/>
-            </geometry>
-        </collision>
-        <inertial>
-            <mass value="2"/>   <!-- -->
-            <inertia ixx="0.2741" ixy="0.0" ixz="0.0" iyy="0.125" iyz="0.0" izz="0.2741"/>
-        </inertial>
-    </link>
-    
-    <gazebo reference="arms_base"> 
-        <material>Gazebo/Grey</material>
-    </gazebo>
-    <gazebo reference="controller_unit"> 
-        <material>Gazebo/Grey</material>
-    </gazebo>
-    
-    <!---->
-
-    <gazebo reference="franka_controller_unit_plate"> 
-        <material>Gazebo/Black</material>
-    </gazebo>
-    <gazebo reference="ur_controller_unit_plate"> 
-        <material>Gazebo/Black</material>
-    </gazebo>
-    
-    
-    <joint name="summit_to_arms_base" type="fixed">
-        <parent link="$(arg summit_prefix)base_chapa"/>
-        <child link="arms_base"/>
-        <origin xyz="0.135 0.410 0" rpy="0 0 -1.57079632679"/>
-    </joint>
-    
-     <!--********************************************************************************************************************************************* -->
+    <!--********************************************************************************************************************************************* -->
 
     <!-- ROS Plugins -->
     <gazebo>

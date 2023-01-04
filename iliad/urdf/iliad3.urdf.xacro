@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <robot name="iliad" xmlns:xacro="http://wiki.ros.org/xacro">
+    
 
+<!-- Velvet
 <xacro:property name="box_x" value="0.14"/>
 <xacro:property name="box_y" value="0.08"/>
 <xacro:property name="box_z" value="0.28"/>
 <xacro:property name="box_dim" value="${box_x} ${box_y} ${box_z}"/> 
-<xacro:property name="mass" value="2"/> 
+<xacro:property name="mass" value="1"/> 
+
 
   <link name="velvet_link">
     <visual>
@@ -28,7 +31,6 @@
   </link>
   
   <gazebo reference="velvet_link">
-     <!--<static>true</static> -->
     <mu1 value="1.0"/>
     <mu2 value="1.0"/>
     <kp value="1e+13" />
@@ -45,6 +47,123 @@
     </collision>
     
   </gazebo>
-    
+  -->
 
+<!-- flange
+    
+    <xacro:include filename="$(find iliad)/urdf/flange.urdf.xacro"/>    
+
+    <xacro:property name="fl_box_x" value="0.10"/>
+    <xacro:property name="fl_box_y" value="0.06"/>
+    <xacro:property name="fl_box_z" value="0.08"/>
+    <xacro:property name="fl_box_dim" value="${fl_box_x} ${fl_box_y} ${fl_box_z}"/> 
+    <xacro:property name="fl_mass" value="0.300"/> 
+    
+    
+    
+    <link name="flange">
+        <visual>
+            <geometry>
+                <box size="${fl_box_dim}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0.02 0 0"/>
+            <material name="grey">
+                <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="${fl_box_dim}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0.02 0 0"/>
+        </collision>
+        <inertial>
+            <mass value="${fl_mass}"/>
+            <inertia ixx="${fl_mass/12*(fl_box_y*fl_box_y+fl_box_z*fl_box_z)}" ixy="0.0" ixz="0.0" iyy="${fl_mass/12*(fl_box_x*fl_box_x+fl_box_z*fl_box_z)}" iyz="0.0" izz="${fl_mass/12*(fl_box_x*fl_box_x+fl_box_y*fl_box_y)}"/>
+            <origin rpy="0 0 0" xyz="0.02 0 0"/>
+        </inertial>
+    </link>
+    
+    
+    <gazebo reference="flange"> 
+        <material>Gazebo/Grey</material>
+    </gazebo>
+    -->
+    
+    <!-- controller_unit
+    
+    <xacro:property name="ctr_box_x" value="0.25"/>
+    <xacro:property name="ctr_box_y" value="0.46"/>
+    <xacro:property name="ctr_box_z" value="0.25"/>
+    <xacro:property name="ctr_box_dim" value="${ctr_box_x} ${ctr_box_y} ${ctr_box_z}"/> 
+    <xacro:property name="ctr_mass" value="12"/> 
+
+        
+        <link name="controller_unit">
+            <visual>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
+                <material name="grey">
+                    <color rgba="0.5 0.5 0.5 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://iliad/meshes/controller_boxes.stl"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.1715 -0.2415 0"/>
+            </collision>
+            <inertial>
+                <mass value="${ctr_mass}"/>
+                <inertia ixx="${ctr_mass/12*(ctr_box_y*ctr_box_y+ctr_box_z*ctr_box_z)}" ixy="0.0" ixz="0.0" iyy="${ctr_mass/12*(ctr_box_x*ctr_box_x+ctr_box_z*ctr_box_z)}" iyz="0.0" izz="${ctr_mass/12*(ctr_box_x*ctr_box_x+ctr_box_y*ctr_box_y)}"/>
+                <origin rpy="0 0 0" xyz="0 0 0.13"/>
+            </inertial>
+        </link>
+     
+        <gazebo reference="controller_unit"> 
+            <material>Gazebo/Grey</material>
+        </gazebo>
+-->
+      
+    
+<!-- arms_base-->
+    
+    <xacro:property name="arb_box_x" value="0.2"/>
+    <xacro:property name="arb_box_y" value="0.57"/>
+    <xacro:property name="arb_box_z" value="0.1"/>
+    <xacro:property name="arb_box_dim" value="${arb_box_x} ${arb_box_y} ${arb_box_z}"/> 
+    <xacro:property name="arb_mass" value="2"/> 
+
+        
+    <link name="arms_base">
+        <visual>
+            <geometry>
+                <mesh filename="package://iliad/meshes/arm_base.stl"/>
+            </geometry>
+            <origin xyz="-0.135 0.410 0" rpy="0 0 -1.57079632679"/>  
+            <material name="grey">
+                <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://iliad/meshes/arm_base.stl"/>
+            </geometry>
+            <origin xyz="-0.135 0.410 0" rpy="0 0 -1.57079632679"/>  
+        </collision>
+        <inertial>
+            <mass value="${arb_mass}"/>
+            <inertia ixx="${arb_mass/12*(arb_box_y*arb_box_y+arb_box_z*arb_box_z)}" ixy="0.0" ixz="0.0" iyy="${arb_mass/12*(arb_box_x*arb_box_x+arb_box_z*arb_box_z)}" iyz="0.0" izz="${arb_mass/12*(arb_box_x*arb_box_x+arb_box_y*arb_box_y)}"/>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>  
+        </inertial>
+    </link>
+    
+    <gazebo reference="arms_base"> 
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    
+    
 </robot>

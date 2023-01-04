@@ -1,43 +1,43 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:property name="box_x" value="0.14"/>
-<xacro:property name="box_y" value="0.08"/>
-<xacro:property name="box_z" value="0.28"/>
-<xacro:property name="box_dim" value="${box_x} ${box_y} ${box_z}"/> 
-<xacro:property name="mass" value="2"/> 
+<xacro:property name="vel_box_x" value="0.14"/>
+<xacro:property name="vel_box_y" value="0.08"/>
+<xacro:property name="vel_box_z" value="0.28"/>
+<xacro:property name="vel_box_dim" value="${vel_box_x} ${vel_box_y} ${vel_box_z}"/> 
+<xacro:property name="vel_mass" value="1"/> 
 
-<xacro:property name="velvet_mass" value="${100*gr_to_Kg}"/> 
-
-<xacro:macro name="model_velvet" params="parent name *origin">
+<xacro:macro name="velvet_macro" params="parent name *origin">
   
-    <joint name="${parent}_${name}_base_joint" type="fixed">
+    <joint name="${parent}_${name}" type="fixed">
         <xacro:insert_block name="origin"/>
         <parent link="${parent}"/>
-        <child link="${name}_link"/>
+        <child link="${name}"/>
     </joint>
     
-    <link name="${name}_link">
+    <link name="${name}">
         <visual>
       <geometry>
         <mesh filename="package://iliad/meshes/gazebo_assieme.stl"/>
       </geometry>      
-      <color rgba="1.0 0.0 0.0 1.0"/>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>
     </visual>
     <inertial>
         <origin xyz="0 0 0"/>
-        <mass value="${mass}"/>
-        <inertia ixx="${mass/12*(box_y*box_y+box_z*box_z)}" ixy="0.0" ixz="0.0" iyy="${mass/12*(box_x*box_x+box_z*box_z)}" iyz="0.0" izz="${mass/12*(box_x*box_x+box_y*box_y)}"/>
+        <mass value="${vel_mass}"/>
+        <inertia ixx="${vel_mass/12*(vel_box_y*vel_box_y+vel_box_z*vel_box_z)}" ixy="0.0" ixz="0.0" iyy="${vel_mass/12*(vel_box_x*vel_box_x+vel_box_z*vel_box_z)}" iyz="0.0" izz="${vel_mass/12*(vel_box_x*vel_box_x+vel_box_y*vel_box_y)}"/>
     </inertial>
     <collision>
       <geometry>
-           <box size="${box_dim}"/>
+           <box size="${vel_box_dim}"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
     </link>
 
-  <gazebo reference="${name}_link">
+  <gazebo reference="${name}">
      <!--<static>true</static> -->
     <mu1 value="1.0"/>
     <mu2 value="1.0"/>

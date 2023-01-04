@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="fl_box_x" value="0.10"/>
+    <xacro:property name="fl_box_y" value="0.06"/>
+    <xacro:property name="fl_box_z" value="0.08"/>
+    <xacro:property name="fl_box_dim" value="${fl_box_x} ${fl_box_y} ${fl_box_z}"/> 
+    <xacro:property name="fl_mass" value="0.300"/> 
+
+    <xacro:macro name="flange_macro" params="parent name *origin">
+        
+        <link name="flange">
+            <visual>
+                <geometry>
+                    <box size="${fl_box_dim}"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="0.02 0 0"/>
+                <material name="grey">
+                    <color rgba="0.5 0.5 0.5 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <box size="${fl_box_dim}"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="0.02 0 0"/>
+            </collision>
+            <inertial>
+                <mass value="${fl_mass}"/>
+                <inertia ixx="${fl_mass/12*(fl_box_y*fl_box_y+fl_box_z*fl_box_z)}" ixy="0.0" ixz="0.0" iyy="${fl_mass/12*(fl_box_x*fl_box_x+fl_box_z*fl_box_z)}" iyz="0.0" izz="${fl_mass/12*(fl_box_x*fl_box_x+fl_box_y*fl_box_y)}"/>
+                <origin rpy="0 0 0" xyz="0.02 0 0"/>
+            </inertial>
+        </link>
+        
+        <joint name="${parent}_to_${name}" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+            <xacro:insert_block name="origin"/>
+        </joint>
+        
+        <gazebo reference="flange"> 
+            <material>Gazebo/Grey</material>
+        </gazebo>
+        
+    </xacro:macro>
+
+</robot>
