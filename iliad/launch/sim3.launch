@@ -1,0 +1,85 @@
+<launch>
+    
+    <!-- Model of the robot -->
+    <arg name="robot_model" value="$(find iliad)/urdf/iliad3.urdf.xacro"/>
+    
+    <arg name="panda_base_x"     default="0.25"/>
+    <arg name="panda_base_y"     default="-0.22"/>
+    <arg name="panda_base_z"     default="0.15"/>
+    <arg name="panda_base_roll"  default="0.00"/>
+    <arg name="panda_base_pitch" default="0.785"/>  <!-- pi/4=0.785 -->
+    <arg name="panda_base_yaw"   default="0.00"/>
+    <arg name="ur10e_base_x"     default="0.35"/>
+    <arg name="ur10e_base_y"     default="0.32"/>
+    <arg name="ur10e_base_z"     default="0.05"/>
+    <arg name="ur10e_base_roll"  default="0.00"/>
+    <arg name="ur10e_base_pitch" default="0.00"/>
+    <arg name="ur10e_base_yaw"   default="0.00"/>
+    
+    <!-- RViz Configuration -->
+    <arg name="rvizconfig" value="$(find iliad)/rviz/iliad_rviz.rviz" />
+    <arg name="launch_rviz" default="true"/>
+    0
+    <!-- Gazebo Arguments-->
+    <arg name="gazebo_paused" default="false"/>
+    <arg name="gazebo_use_sim_time" default="true"/>
+    <arg name="gazebo_gui" default="true"/>
+    <arg name="gazebo_headless" default="false"/>
+    <arg name="gazebo_debug" default="false"/>
+
+    <!-- Open Gazebo World -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find iliad)/world/pallet_world.world"/>
+        <arg name="paused" value="$(arg gazebo_paused)"/>
+        <arg name="use_sim_time" value="$(arg gazebo_use_sim_time)"/>
+        <arg name="gui" value="$(arg gazebo_gui)" />
+        <arg name="headless" value="$(arg gazebo_headless)"/>
+        <arg name="debug" value="$(arg gazebo_debug)" />        
+    </include>
+    
+    <!-- Load the robot description of the complete robot -->
+    <arg name="summit_prefix" value="summitxls_"/>    <!-- if change this args, change also controller definition in .yaml files--> 
+    <arg name="ur10e_prefix"  value="ur10e_"/>
+    <arg name="panda_prefix"  value="panda"/>
+        
+    <arg name="ros_planar_move_plugin" default="false"/>
+    
+    <!-- Load robot model in ROS parameter server 
+    <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'
+        panda_base_x:=$(arg panda_base_x)
+        panda_base_y:=$(arg panda_base_y)  
+        panda_base_z:=$(arg panda_base_z)
+        panda_base_roll:=$(arg panda_base_roll)
+        panda_base_pitch:=$(arg panda_base_pitch)
+        panda_base_yaw:=$(arg panda_base_yaw)
+        ur10e_base_x:=$(arg ur10e_base_x)
+        ur10e_base_y:=$(arg ur10e_base_y)
+        ur10e_base_z:=$(arg ur10e_base_z)
+        ur10e_base_roll:=$(arg ur10e_base_roll)
+        ur10e_base_pitch:=$(arg ur10e_base_pitch)
+        ur10e_base_yaw:=$(arg ur10e_base_yaw)
+     
+        summit_prefix:=$(arg summit_prefix)
+        ur10e_prefix:=$(arg ur10e_prefix)
+        panda_prefix:=$(arg panda_prefix)
+
+        ros_planar_move_plugin:=$(arg ros_planar_move_plugin)"
+        />
+    -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'"
+        />
+    
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0"/>
+    
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+    args="-unpause -urdf -model iliad -param robot_description" respawn="false" output="screen" />
+
+
+
+     <!--   
+    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />   -->
+
+</launch>
