@@ -103,7 +103,7 @@
     
     <rosparam command="load"
             file="$(find iliad)/config/ur10e_controllers.yaml"/>
-    
+    <!--
     <node name="ur10e_controller_spawner" pkg="controller_manager" type="spawner"
     args="ur10e_shoulder_pan_joint_position_controller 
           ur10e_shoulder_lift_joint_position_controller 
@@ -111,6 +111,11 @@
           ur10e_wrist_1_joint_position_controller
           ur10e_wrist_2_joint_position_controller
           ur10e_wrist_3_joint_position_controller"
+    output="screen" respawn="false" />
+    -->
+    
+    <node name="ur10e_controller_spawner" pkg="controller_manager" type="spawner"
+    args="eff_joint_traj_controller"
     output="screen" respawn="false" />
     
     <rosparam command="load"

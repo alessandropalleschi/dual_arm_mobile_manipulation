@@ -211,3 +211,6 @@ target_link_libraries(simple_pub ${catkin_LIBRARIES})
 
 add_executable(initial_pose src/initial_pose.cpp)
 target_link_libraries(initial_pose ${catkin_LIBRARIES})
+
+add_executable(initial_pose_traj src/initial_pose_traj.cpp)
+target_link_libraries(initial_pose_traj ${catkin_LIBRARIES})
