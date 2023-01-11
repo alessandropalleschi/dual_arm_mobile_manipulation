@@ -42,7 +42,7 @@
     <arg name="ur10e_prefix"  value="ur10e_"/>
     <arg name="panda_prefix"  value="panda"/>
         
-    <arg name="ros_planar_move_plugin" default="false"/>
+    <arg name="ros_planar_move_plugin" default="true"/>
     
     <!-- Load robot model in ROS parameter server -->
     <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'
