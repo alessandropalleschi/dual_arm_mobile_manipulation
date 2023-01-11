@@ -15,8 +15,6 @@ int main(int argc, char **argv)
     ros::Publisher traj_command_ur10e = n.advertise<trajectory_msgs::JointTrajectory>("/ur10e_eff_joint_traj_controller/command", 100);
     ros::Publisher traj_command_panda = n.advertise<trajectory_msgs::JointTrajectory>("/panda_eff_joint_traj_controller/command", 100);
 
-    
-
     ros::Rate loop_rate(1);
 
     // Create a JointTrajectory with all positions set to zero, and command the arm.
