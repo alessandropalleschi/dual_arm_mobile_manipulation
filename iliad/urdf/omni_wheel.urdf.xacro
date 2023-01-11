@@ -54,7 +54,7 @@
       </visual>
 
       <collision>
-            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
         <geometry>
             <cylinder length="${omni_wheel_height}" radius="${omni_wheel_radius}" />
         </geometry>
@@ -79,12 +79,12 @@
     </transmission>
 
     <gazebo reference="${prefix}_wheel_link">
-		<mu1 value="1.0"/>
-		<mu2 value="1.0"/>
-		<kp value="10000000.0" />
-		<kd value="1.0" />
-		<fdir1 value="1 0 0"/>
-        <turnGravityOff>false</turnGravityOff>
+      <mu1 value="0.0"/>            <!-- Set to 1 for diffDrive controller, 0.0 for rosPlanarPlugin -->
+      <mu2 value="0.0"/>
+      <kp value="10000000.0" />
+      <kd value="1.0" />
+      <!--<fdir1 value="1 0 0"/>
+      <turnGravityOff>false</turnGravityOff>-->
     </gazebo>
     
     <!--
