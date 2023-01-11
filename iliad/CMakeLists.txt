@@ -217,3 +217,15 @@ target_link_libraries(initial_pose_traj ${catkin_LIBRARIES})
 
 add_executable(listener src/listener.cpp)
 target_link_libraries(listener ${catkin_LIBRARIES})
+
+add_executable(listener_link_pose src/listener_link_pose.cpp)
+target_link_libraries(listener_link_pose ${catkin_LIBRARIES})
+
+add_executable(manager src/manager.cpp)
+target_link_libraries(manager ${catkin_LIBRARIES})
+
+add_executable(model_state src/model_state.cpp)
+target_link_libraries(model_state ${catkin_LIBRARIES})
+
+add_executable(planar_move src/planar_move.cpp)
+target_link_libraries(planar_move ${catkin_LIBRARIES})

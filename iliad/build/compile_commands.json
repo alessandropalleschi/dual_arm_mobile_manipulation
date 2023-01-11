@@ -1,6 +1,11 @@
 [
 {
   "directory": "/home/marco/catkin_ws_iliad/src/iliad/build",
+  "command": "/usr/bin/g++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"iliad\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/manager.dir/src/manager.cpp.o -c /home/marco/catkin_ws_iliad/src/iliad/src/manager.cpp",
+  "file": "/home/marco/catkin_ws_iliad/src/iliad/src/manager.cpp"
+},
+{
+  "directory": "/home/marco/catkin_ws_iliad/src/iliad/build",
   "command": "/usr/bin/g++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"iliad\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/initial_pose_traj.dir/src/initial_pose_traj.cpp.o -c /home/marco/catkin_ws_iliad/src/iliad/src/initial_pose_traj.cpp",
   "file": "/home/marco/catkin_ws_iliad/src/iliad/src/initial_pose_traj.cpp"
 },
@@ -16,8 +21,23 @@
 },
 {
   "directory": "/home/marco/catkin_ws_iliad/src/iliad/build",
+  "command": "/usr/bin/g++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"iliad\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/planar_move.dir/src/planar_move.cpp.o -c /home/marco/catkin_ws_iliad/src/iliad/src/planar_move.cpp",
+  "file": "/home/marco/catkin_ws_iliad/src/iliad/src/planar_move.cpp"
+},
+{
+  "directory": "/home/marco/catkin_ws_iliad/src/iliad/build",
   "command": "/usr/bin/g++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"iliad\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/simple_pub.dir/src/simple_pub.cpp.o -c /home/marco/catkin_ws_iliad/src/iliad/src/simple_pub.cpp",
   "file": "/home/marco/catkin_ws_iliad/src/iliad/src/simple_pub.cpp"
+},
+{
+  "directory": "/home/marco/catkin_ws_iliad/src/iliad/build",
+  "command": "/usr/bin/g++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"iliad\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/listener_link_pose.dir/src/listener_link_pose.cpp.o -c /home/marco/catkin_ws_iliad/src/iliad/src/listener_link_pose.cpp",
+  "file": "/home/marco/catkin_ws_iliad/src/iliad/src/listener_link_pose.cpp"
+},
+{
+  "directory": "/home/marco/catkin_ws_iliad/src/iliad/build",
+  "command": "/usr/bin/g++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"iliad\\\" -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/model_state.dir/src/model_state.cpp.o -c /home/marco/catkin_ws_iliad/src/iliad/src/model_state.cpp",
+  "file": "/home/marco/catkin_ws_iliad/src/iliad/src/model_state.cpp"
 },
 {
   "directory": "/home/marco/catkin_ws_iliad/src/iliad/build/gtest/googlemock",
