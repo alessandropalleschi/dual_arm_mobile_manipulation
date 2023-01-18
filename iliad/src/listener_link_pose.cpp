@@ -11,10 +11,10 @@ void chatterCallback(const gazebo_msgs::LinkStates::ConstPtr& state)
 {
     ros::Rate loop_rate(10);
 
-   // ROS_INFO_STREAM ("\n ------------------------------------------------------------------ \n "
-     //                   "Name: " << state->name[7]);
-    ROS_INFO_STREAM ("\n ----------------------------------------------------------------- \n "
-                        "Pose: " << state->pose[7]);
+    ROS_INFO_STREAM ("\n ------------------------------------------------------------------ \n "
+                        "Name: " << state->name[24]);
+   // ROS_INFO_STREAM ("\n ----------------------------------------------------------------- \n "
+         //               "Pose: " << state->pose[6]);
    // ROS_INFO_STREAM ("\n ------------------------------------------------------------------ \n "
      //                   "Twist: \n" << state->twist[7]);
 
@@ -26,7 +26,7 @@ void chatterCallback(const gazebo_msgs::LinkStates::ConstPtr& state)
     base_pose.orientation.z= 0.0;
     base_pose.orientation.w= 1;
 
-    base_pose = state->pose[7];
+    base_pose = state->pose[24];
     
     ROS_INFO_STREAM ("\n ----------------------------------------------------------------- \n "
                         "Pose: " << base_pose);

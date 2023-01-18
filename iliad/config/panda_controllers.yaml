@@ -10,13 +10,13 @@ panda_eff_joint_traj_controller:
     - panda_joint6
     - panda_joint7
   gains:
-    panda_joint1: { p: 600, d: 30, i: 0 }
-    panda_joint2: { p: 600, d: 30, i: 0 }
-    panda_joint3: { p: 600, d: 30, i: 0 }
-    panda_joint4: { p: 600, d: 30, i: 0 }
-    panda_joint5: { p: 250, d: 10, i: 0 }
-    panda_joint6: { p: 150, d: 10, i: 0 }
-    panda_joint7: { p: 50, d: 5, i: 0 }
+    panda_joint1: { p: 6000, d: 30, i: 0 }
+    panda_joint2: { p: 6000, d: 30, i: 0 }
+    panda_joint3: { p: 6000, d: 30, i: 0 }
+    panda_joint4: { p: 6000, d: 30, i: 0 }
+    panda_joint5: { p: 2500, d: 10, i: 0 }
+    panda_joint6: { p: 1500, d: 10, i: 0 }
+    panda_joint7: { p: 500, d: 5, i: 0 }
   constraints:
     goal_time: 0.5
     panda_joint1: { goal: 0.05}

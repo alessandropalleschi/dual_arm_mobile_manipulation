@@ -6,6 +6,7 @@
 
 #include <sstream>
 
+trajectory_msgs::JointTrajectory ur10e_set_point_position (trajectory_msgs::JointTrajectory pose_ur10e, double pose_goal[6],int pos);
 
 int main(int argc, char **argv) 
 { 
@@ -38,13 +39,22 @@ int main(int argc, char **argv)
     // Resize the vector to the same length as the joint names.
     // Values are initialized to 0.
     // pose_ur10e.points[0].positions.resize(pose_ur10e.joint_names.size(), 1.0);
-    pose_ur10e.points[0].positions.resize(6);
+   /*  pose_ur10e.points[0].positions.resize(6);
     pose_ur10e.points[0].positions[0] = 0;
     pose_ur10e.points[0].positions[1] = -1.5;
     pose_ur10e.points[0].positions[2] = 2.8;
     pose_ur10e.points[0].positions[3] = -1.3;
     pose_ur10e.points[0].positions[4] = 1.57;
-    pose_ur10e.points[0].positions[5] = 3.14;
+    pose_ur10e.points[0].positions[5] = 3.14;*/
+
+    double pose_goal0[6] = { 0, -1.5 , 2.8, -1.3, 1.57, 3.14};
+
+    double pose_goal1[6] = { -0.2044, 0.4460 , -1.5856, -2.0006, -1.3664, 0    };
+    double pose_goal2[6] = { -0.2044, 0.0890 , -1.3381,  1.2482,  1.3664, 3.14 };
+    double pose_goal3[6] = { -0.2044, -1.0728,  1.5856,  2.6289, -1.3664, 0    };
+    double pose_goal4[6] = { -0.2044, -1.1953,  1.3372, -0.1419,  1.3664, 3.14 };
+
+    pose_ur10e = ur10e_set_point_position(pose_ur10e,pose_goal0,0);
 
     pose_ur10e.points[0].velocities.resize(6);
     pose_ur10e.points[0].velocities[0] = 0.0;
@@ -126,4 +136,15 @@ int main(int argc, char **argv)
  
  ROS_INFO_STREAM("\n Ha funzionato?\n");
  return 0;
+}
+
+
+trajectory_msgs::JointTrajectory ur10e_set_point_position (trajectory_msgs::JointTrajectory pose_ur10e, double pose_goal[6],int pos){
+    
+    pose_ur10e.points[pos].positions.resize(6);
+    int i = 0;
+    for (int i = 0; i <= 5; i++) {
+        pose_ur10e.points[pos].positions[i] = pose_goal[i];
+    }
+    return pose_ur10e;
 }

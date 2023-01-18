@@ -4,6 +4,9 @@
 #include "ros/time.h"
 #include <gazebo_msgs/LinkStates.h>
 
+#include <tf2/LinearMath/Quaternion.h>
+
+
 #include <sstream>
 
 gazebo_msgs::LinkStates link_state;
@@ -21,6 +24,7 @@ void chatterCallback(const gazebo_msgs::LinkStates::ConstPtr& state)
    // ROS_INFO_STREAM ("\n ------------------------------------------------------------------ \n "
      //                   "Twist: \n" << state->twist[7]);
 
+    // -1.52374 0.029631 0.337777 0.002002 -0.000765 -0.015259
     base_pose.position.x = 0.0;
     base_pose.position.y = 0.0;
     base_pose.position.z = 0.0;
@@ -29,7 +33,7 @@ void chatterCallback(const gazebo_msgs::LinkStates::ConstPtr& state)
     base_pose.orientation.z= 0.0;
     base_pose.orientation.w= 1;
 
-    base_pose = state->pose[7];
+    base_pose = state->pose[24];
     
    // ROS_INFO_STREAM ("\n ----------------------------------------------------------------- \n "
      //                   "Pose: " << base_pose);
@@ -51,13 +55,17 @@ int main(int argc, char **argv)
     ros::Rate loop_rate(10);
 
 
-    base_goal.position.x = 0;
-    base_goal.position.y = 0;
+    base_goal.position.x = 0.0;
+    base_goal.position.y = 0.0;
     base_goal.position.z = 0.0;
     base_goal.orientation.x= 0.0;
     base_goal.orientation.y= 0.0;
     base_goal.orientation.z= 0.0;
-    base_goal.orientation.w= 1;
+    base_goal.orientation.w= 0.1;
+
+    tf2::Quaternion quat_goal;
+
+
 
     // Create a JointTrajectory with all positions set to zero, and command the arm.
     while(ros::ok())
@@ -70,9 +78,11 @@ int main(int argc, char **argv)
         base_twist.linear.x = k*(base_goal.position.x-base_pose.position.x);
         base_twist.linear.y = k*(base_goal.position.y-base_pose.position.y);
         base_twist.linear.z = 0.0;
+
         base_twist.angular.x = 0.0;
         base_twist.angular.y = 0.0;
-        base_twist.angular.z = k*(base_goal.orientation.z-base_pose.orientation.z);     //qui ci sta una bella trasformazioncina 
+        base_twist.angular.z = k*(base_goal.orientation.z-base_pose.orientation.z);     //qui ci sta una bella trasformazioncina (questi sono quaternioni)
+        //if (base_twist.angular.z < 0.01 ) base_twist.angular.z = 0.0;
     
         ROS_INFO_STREAM ("Sending command to Summit_base: \n" << base_twist);
 

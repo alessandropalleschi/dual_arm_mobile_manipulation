@@ -137,7 +137,7 @@
 
     <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />   
 
-    <node pkg="iliad" type="initial_pose_traj" name="initial_pose" output="screen" />
+    <!-- <node pkg="iliad" type="initial_pose_traj" name="initial_pose" output="screen" /> -->
         
 
 </launch>
