@@ -1,6 +1,6 @@
 iliad/build
 iliad/.vscode
 
-+bus_conv_fncs
+iliad/+bus_conv_fncs
 
-iliad/script/slprj
+iliad/script/slprj/
