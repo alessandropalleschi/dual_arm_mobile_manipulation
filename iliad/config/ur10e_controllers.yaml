@@ -17,7 +17,7 @@ ur10e_eff_joint_traj_controller:
     ur10e_elbow_joint: {p: 10000,  d: 100, i: 10, i_clamp: 1}
     ur10e_wrist_1_joint: {p: 500,  d: 1, i: 1, i_clamp: 1}
     ur10e_wrist_2_joint: {p: 500,  d: 1, i: 1, i_clamp: 1}
-    ur10e_wrist_3_joint: {p: 10,  d: 0.1, i: 0, i_clamp: 1}  
+    ur10e_wrist_3_joint: {p: 200,  d: 0.1, i: 0, i_clamp: 1}  
   constraints:
     goal_time: 0.6
     stopped_velocity_tolerance: 0.01

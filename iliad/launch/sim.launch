@@ -19,7 +19,7 @@
     <!-- RViz Configuration -->
     <arg name="rvizconfig" value="$(find iliad)/rviz/iliad_rviz.rviz" />
     <arg name="launch_rviz" default="true"/>
-    0
+    
     <!-- Gazebo Arguments-->
     <arg name="gazebo_paused" default="false"/>
     <arg name="gazebo_use_sim_time" default="true"/>
@@ -29,7 +29,7 @@
 
     <!-- Open Gazebo World -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find iliad)/world/pallet_world.world"/> <!-- -->
+        <arg name="world_name" value="$(find iliad)/world/pallet_world2.world"/> <!-- -->
         <arg name="paused" value="$(arg gazebo_paused)"/>
         <arg name="use_sim_time" value="$(arg gazebo_use_sim_time)"/>
         <arg name="gui" value="$(arg gazebo_gui)" />
@@ -135,7 +135,7 @@
         args="panda_eff_joint_traj_controller" 
         output="screen" respawn="false" /> 
 
-    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />   
+   <!-- <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->  
 
     <!-- <node pkg="iliad" type="initial_pose_traj" name="initial_pose" output="screen" /> -->
         
