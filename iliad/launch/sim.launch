@@ -21,7 +21,7 @@
     <arg name="launch_rviz" default="true"/>
     
     <!-- Gazebo Arguments-->
-    <arg name="gazebo_paused" default="false"/>
+    <arg name="gazebo_paused" default="true"/>
     <arg name="gazebo_use_sim_time" default="true"/>
     <arg name="gazebo_gui" default="true"/>
     <arg name="gazebo_headless" default="false"/>
@@ -29,7 +29,7 @@
 
     <!-- Open Gazebo World -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find iliad)/world/pallet_world2.world"/> <!-- -->
+        <arg name="world_name" value="$(find iliad)/world/pallet_world3.world"/> <!-- -->
         <arg name="paused" value="$(arg gazebo_paused)"/>
         <arg name="use_sim_time" value="$(arg gazebo_use_sim_time)"/>
         <arg name="gui" value="$(arg gazebo_gui)" />
@@ -68,7 +68,7 @@
     
     <!-- push robot_description to factory and spawn robot in gazebo -->
         <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
-        args="-unpause -urdf -model iliad -param robot_description" respawn="false" output="screen" />
+        args=" -urdf -model iliad -param robot_description" respawn="false" output="screen" />
         
         
     <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
