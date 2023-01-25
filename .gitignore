@@ -1,10 +1,11 @@
 iliad/build
+
 iliad/.vscode
 
 iliad/+bus_conv_fncs
-
+iliad/+bus_conv_fncs/
+iliad/script/+bus_conv_fncs
+iliad/script/+bus_conv_fcns/
+iliad/script/slprj
 iliad/script/slprj/
 
-build/
-
-*.mat
