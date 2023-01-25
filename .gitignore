@@ -4,3 +4,5 @@ iliad/.vscode
 iliad/+bus_conv_fncs
 
 iliad/script/slprj/
+
+/iliad/build
