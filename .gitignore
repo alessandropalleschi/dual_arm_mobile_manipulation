@@ -6,3 +6,5 @@ iliad/+bus_conv_fncs
 iliad/script/slprj/
 
 build/
+
+*.mat
