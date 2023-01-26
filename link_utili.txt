@@ -1,0 +1,36 @@
+Gazebo physics parameters, world
+https://classic.gazebosim.org/tutorials?tut=physics_params&cat=physics
+http://wiki.ros.org/cob_gazebo_worlds/Tutorials/Create%20your%20own%20world
+https://classic.gazebosim.org/tutorials?tut=ros_roslaunch&cat=connect_ros
+
+ROS JointTrayectoryController
+http://wiki.ros.org/joint_trajectory_controller
+
+Youtube - The Construct
+How to create and launch a custom world in Gazebo - https://www.youtube.com/watch?v=S8pwfsK-F9w
+How to create and launch custom world in gazebo - https://www.youtube.com/watch?v=7MH15kbuPdk￼
+Create a Gazebo World - https://www.youtube.com/watch?v=UBG1ibBNTiQ
+
+GitHub - Repositories
+NMMI SoftHand https://github.com/NMMI/SoftHand-Plugin
+Franka ROS https://github.com/frankaemika/franka_ros, https://frankaemika.github.io/docs/franka_ros.html#
+Universal Robot https://github.com/ros-industrial/universal_robot
+URDF Tutorial ROS https://github.com/ros/urdf_sim_tutorial , http://wiki.ros.org/urdf/Tutorials/Using%20a%20URDF%20in%20Gazebo , http://wiki.ros.org/xacro#Macros
+ALAN https://github.com/CentroEPiaggio/Alan
+Vito Robot (Velvet) https://github.com/CentroEPiaggio/vito-robot/tree/9ecddb679fec187a3490b13d62c9f3eccc4c4f8c
+Robotnik https://github.com/RobotnikAutomation
+
+ROS Control (Controller, Transmission, Hardware Interfaces)
+https://github.com/frankaemika/franka_ros
+https://sir.upc.edu/projects/rostutorials/10-gazebo_control_tutorial/index.html
+
+MATLAB & Simulink
+Call ROS Service in Simulink - https://it.mathworks.com/help/ros/ug/call-ros-service-in-simulink.html
+Perform Co-Simulation between Simulink and Gazebo - https://it.mathworks.com/help/robotics/ug/perform-co-simulation-between-simulink-and-gazebo.html
+Apply Forces and Torques in Gazebo - https://it.mathworks.com/help/ros/ug/apply-forces-and-torques-in-gazebo.html , https://it.mathworks.com/help/robotics/ref/gazeboapplycommand.html?s_tid=doc_ta
+
+Gazebo
+ROS Communication - ApplyWrench_Service https://classic.gazebosim.org/tutorials?tut=ros_comm&cat=connect_ros , http://docs.ros.org/en/api/gazebo_msgs/html/srv/ApplyBodyWrench.html
+
+Q&A
+https://answers.ros.org/question/293830/what-is-the-fix-for-no-p-gain-specified-for-pid-namespace-gazebo_ros_controlpid_gainsback_right_wheel_joint-ros-melodic/
