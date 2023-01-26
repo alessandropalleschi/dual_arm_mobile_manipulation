@@ -6,10 +6,11 @@ franka = init_franka();
 ur10e = init_ur10e();
 %show(ur10e)
 
-
 fprintf("Robot models loaded. \n");
 
-fprintf("Ready to run simulation in Simulink...\n");
+fprintf("Ready to run simulation: \n" + ...
+        "first run 'roslaunch iliad sim.launch' from terminal...\n" + ...
+        "then run simulation in 'controller_stateflow.slx   \n");
 
 %%
 %-------------------------------------------------------------------------%
