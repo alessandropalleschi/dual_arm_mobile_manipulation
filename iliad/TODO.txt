@@ -1,6 +1,0 @@
- 
- ricalibrare pid manipolatori
- 
- aggiungere pid ruote summit
- 
- aggiungere end effector ai manopolatori. C'è un modo corretto o uno sbagliato?

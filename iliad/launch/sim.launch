@@ -38,11 +38,13 @@
     </include>
     
     <!-- Load the robot description of the complete robot -->
-    <arg name="summit_prefix" value="summitxls_"/>    <!-- if change this args, change also controller definition in .yaml files--> 
+    <arg name="summit_prefix" value="summitxls_"/>    <!-- if change this args, change also controller definition in /config/*.yaml files--> 
     <arg name="ur10e_prefix"  value="ur10e_"/>
     <arg name="panda_prefix"  value="panda"/>
         
-    <arg name="ros_planar_move_plugin" default="true"/>
+    <!-- Set true for use RosPlanarMovePlugin (raccomended).
+    If false, differentialDrive will be used for OmniDrive controller -->
+    <arg name="ros_planar_move_plugin" default="true"/>   <!-- if change this args to false, change also friction parameters in urdf/omni_wheel.urdf.xacro--> 
     
     <!-- Load robot model in ROS parameter server -->
     <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'
@@ -103,16 +105,6 @@
     
     <rosparam command="load"
             file="$(find iliad)/config/ur10e_controllers.yaml"/>
-    <!--
-    <node name="ur10e_controller_spawner" pkg="controller_manager" type="spawner"
-    args="ur10e_shoulder_pan_joint_position_controller 
-          ur10e_shoulder_lift_joint_position_controller 
-          ur10e_elbow_joint_position_controller
-          ur10e_wrist_1_joint_position_controller
-          ur10e_wrist_2_joint_position_controller
-          ur10e_wrist_3_joint_position_controller"
-    output="screen" respawn="false" />
-    -->
     
     <node name="ur10e_controller_spawner" pkg="controller_manager" type="spawner"
     args="ur10e_eff_joint_traj_controller"
@@ -120,24 +112,12 @@
     
     <rosparam command="load"
             file="$(find iliad)/config/panda_controllers.yaml"/>
-    
-<!--     <node name="panda_controller_spawner" pkg="controller_manager" type="spawner"
-    args="panda_joint1_position_controller 
-          panda_joint2_position_controller 
-          panda_joint3_position_controller
-          panda_joint4_position_controller
-          panda_joint5_position_controller
-          panda_joint6_position_controller
-          panda_joint7_position_controller"
-    output="screen" respawn="false" /> -->
        
     <node name="panda_controller_spawner" pkg="controller_manager" type="spawner"
         args="panda_eff_joint_traj_controller" 
         output="screen" respawn="false" /> 
 
-   <!-- <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->  
-
-    <!-- <node pkg="iliad" type="initial_pose_traj" name="initial_pose" output="screen" /> -->
+    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> 
         
 
 </launch>
