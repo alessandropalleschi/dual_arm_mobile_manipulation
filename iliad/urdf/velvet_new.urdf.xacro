@@ -1,61 +1,67 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:property name="vel_box_x" value="0.14"/>
-<xacro:property name="vel_box_y" value="0.08"/>
-<xacro:property name="vel_box_z" value="0.28"/>
-<xacro:property name="vel_box_dim" value="${vel_box_x} ${vel_box_y} ${vel_box_z}"/> 
-<xacro:property name="vel_mass" value="1"/> 
+  <!-- This file create the velvet end effector after the last UR10e link.
+        This link is based on the real velvet tray in Centro Piaggio, already used in WRAPP-up project (vito-robot repository)
+    -->
 
-<xacro:macro name="velvet_macro" params="parent name *origin">
-  
-    <joint name="${parent}_${name}" type="fixed">
-        <xacro:insert_block name="origin"/>
-        <parent link="${parent}"/>
-        <child link="${name}"/>
-    </joint>
-    
-    <link name="${name}">
-        <visual>
-      <geometry>
-        <mesh filename="package://iliad/meshes/gazebo_assieme.stl"/>
-      </geometry>      
-      <material name="green">
-          <color rgba="0 1 0 1"/>
-      </material>
-    </visual>
-    <inertial>
-        <origin xyz="0 0 0"/>
-        <mass value="${vel_mass}"/>
-        <inertia ixx="${vel_mass/12*(vel_box_y*vel_box_y+vel_box_z*vel_box_z)}" ixy="0.0" ixz="0.0" iyy="${vel_mass/12*(vel_box_x*vel_box_x+vel_box_z*vel_box_z)}" iyz="0.0" izz="${vel_mass/12*(vel_box_x*vel_box_x+vel_box_y*vel_box_y)}"/>
-    </inertial>
-    <collision>
-      <geometry>
-           <box size="${vel_box_dim}"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-    </collision>
-    </link>
 
-  <gazebo reference="${name}">
-     <!--<static>true</static> -->
-    <mu1 value="1.0"/>
-    <mu2 value="1.0"/>
-    <kp value="1e+13" />
-    <kd value="1.0" />
-    
-    <collision>
-      <surface>
-        <contact>
-          <ode>
-            <min_depth>0.01</min_depth>
-          </ode>
-        </contact>
-      </surface>
-    </collision>
-    
-  </gazebo>
+  <xacro:property name="vel_box_x" value="0.14"/>
+  <xacro:property name="vel_box_y" value="0.08"/>
+  <xacro:property name="vel_box_z" value="0.28"/>
+  <xacro:property name="vel_box_dim" value="${vel_box_x} ${vel_box_y} ${vel_box_z}"/> 
+  <xacro:property name="vel_mass" value="1"/> 
 
-</xacro:macro>
+  <xacro:macro name="velvet_macro" params="parent name *origin">
+    
+      <joint name="${parent}_${name}" type="fixed">
+          <xacro:insert_block name="origin"/>
+          <parent link="${parent}"/>
+          <child link="${name}"/>
+      </joint>
+      
+      <link name="${name}">
+          <visual>
+        <geometry>
+          <mesh filename="package://iliad/meshes/gazebo_assieme.stl"/>
+        </geometry>      
+        <material name="green">
+            <color rgba="0 1 0 1"/>
+        </material>
+      </visual>
+      <inertial>
+          <origin xyz="0 0 0"/>
+          <mass value="${vel_mass}"/>
+          <inertia ixx="${vel_mass/12*(vel_box_y*vel_box_y+vel_box_z*vel_box_z)}" ixy="0.0" ixz="0.0" iyy="${vel_mass/12*(vel_box_x*vel_box_x+vel_box_z*vel_box_z)}" iyz="0.0" izz="${vel_mass/12*(vel_box_x*vel_box_x+vel_box_y*vel_box_y)}"/>
+      </inertial>
+      <collision>
+        <geometry>
+            <box size="${vel_box_dim}"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+      </collision>
+      </link>
+
+    <gazebo reference="${name}">
+      <!--<static>true</static> -->
+      <mu1 value="1.0"/>                    <!--change this to get more real simulation in gazebo-->
+      <mu2 value="1.0"/>
+      <kp value="1e+13" />
+      <kd value="1.0" />
+      
+
+      <collision>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.01</min_depth>   <!--change this to get more real simulation in gazebo-->
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      
+    </gazebo>
+
+  </xacro:macro>
 
 </robot>

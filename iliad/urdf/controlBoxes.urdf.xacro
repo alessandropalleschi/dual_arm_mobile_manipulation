@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    <!-- This file create controller_unit link simulating the controller units of manipulators linked to the Summit chassis.
+     The dimensions of collision box are qualitatives, while the mass and the visual are referred to real control boxes. 
+     -->
+
     <xacro:property name="ctr_box_x" value="0.25"/>
     <xacro:property name="ctr_box_y" value="0.46"/>
     <xacro:property name="ctr_box_z" value="0.25"/>

@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+<!-- ************************** !! ****************************
+    This is the old file used in vito_robot project.
+
+    Please see velvet_new file with collision and inertial properties updated.
+    
+-->
+
+
+
 <!-- conversions -->
 <!-- I couldn't make the simulation work with realistic values, so I tweaked the conversion values -->
 <xacro:property name="mm_to_m" value="0.001"/>

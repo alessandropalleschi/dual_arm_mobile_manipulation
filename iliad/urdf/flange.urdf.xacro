@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    <!-- This file create flange link between the last link of Franka manipulator and the IIT/Pisa SoftHand.
+         This link emulate the real configuration in CentroPiaggio laboratories for Franka manipulator.
+         The visuals, collisions and mass are qualitatives. 
+     -->
+
     <xacro:property name="fl_box_x" value="0.10"/>
     <xacro:property name="fl_box_y" value="0.06"/>
     <xacro:property name="fl_box_z" value="0.08"/>
