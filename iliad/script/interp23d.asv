@@ -1,0 +1,33 @@
+clear
+clc
+
+t = [0,0.1,1,1.5,2,2.9,3];
+step = 20;
+k_tq=3/step;
+tq= 0:k_tq:3;
+
+vx = [0,0,3,3,3,1,1];
+vy = [0,0,0,0,0,0,0];
+vz
+
+figure
+vxq1 = interp1(t,vx,tq,'linear');
+plot(t,vx,'o',tq,vxq1,':.');
+xlim([0 3]);
+title('(Default) Linear Interpolation');
+
+figure
+vyq1 = interp1(t,vy,tq,'linear');
+plot(t,vy,'o',tq,vyq1,':.');
+xlim([0 3]);
+title('(Default) Linear Interpolation');
+
+figure
+plot(vx,vy,'o',vxq1,vyq1,':.');
+
+figure
+vzq1 = interp1(t,vz,tq,'linear');
+plot(t,vz,'o',tq,vzq1,':.');
+xlim([0 3]);
+title('(Default) Linear Interpolation');
+

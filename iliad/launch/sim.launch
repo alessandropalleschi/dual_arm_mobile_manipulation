@@ -18,7 +18,7 @@
     
     <!-- RViz Configuration -->
     <arg name="rvizconfig" value="$(find iliad)/rviz/iliad_rviz.rviz" />
-    <arg name="launch_rviz" default="true"/>
+    <arg name="launch_rviz" default="false"/>
     
     <!-- Gazebo Arguments-->
     <arg name="gazebo_paused" default="true"/>

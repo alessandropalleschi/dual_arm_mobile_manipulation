@@ -12,6 +12,8 @@ fprintf("Ready to run simulation: \n" + ...
         "first run 'roslaunch iliad sim.launch' from terminal...\n" + ...
         "then run simulation in 'controller_stateflow.slx   \n");
 
+
+box_name = 'box_38_18_14_20::link_0';
 %%
 %-------------------------------------------------------------------------%
 

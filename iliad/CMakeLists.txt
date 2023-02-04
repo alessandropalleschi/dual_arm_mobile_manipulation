@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(gazebo REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -118,8 +118,9 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${GAZEBO_INCLUDE_DIRS} 
 )
-
+link_directories(${GAZEBO_LIBRARY_DIRS})
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/iliad.cpp
@@ -229,3 +230,8 @@ target_link_libraries(model_state ${catkin_LIBRARIES})
 
 add_executable(planar_move src/planar_move.cpp)
 target_link_libraries(planar_move ${catkin_LIBRARIES})
+
+
+list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
+add_executable(contacts src/contacts.cpp)
+target_link_libraries(contacts ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} pthread)
