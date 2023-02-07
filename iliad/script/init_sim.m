@@ -1,3 +1,4 @@
+clear 
 clc
 
 franka = init_franka();
@@ -14,6 +15,7 @@ fprintf("Ready to run simulation: \n" + ...
 
 
 box_name = 'box_38_18_14_20::link_0';
+
 %%
 %-------------------------------------------------------------------------%
 
@@ -37,8 +39,23 @@ end
 
 function ur10e = init_ur10e()
 ur10e= loadrobot("universalUR10",'DataFormat','column');
-tform = [[eul2rotm([0,0,0], 'XYZ')],[0,0,0.14]'; ...
+tform = [[eul2rotm([0,0,0], 'XYZ')],[0,0,0.14+0.04]'; ...
                     0 0 0                     1   ];
 addVisual(ur10e.Bodies{10},"Mesh",'gazebo_assieme.stl',tform)
 
+velvet_link_center = rigidBody('velvet_link_center');
+jnt = rigidBodyJoint('velv_cent_jnt','fixed');
+tform = [[eul2rotm([0 0 0], 'xyz')],[0.20+0.04,0,0.05]'; ...
+                      0 0 0                     1   ];
+setFixedTransform(jnt,tform);
+velvet_link_center.Joint = jnt;
+addBody(ur10e,velvet_link_center,'ee_link')
+
+velvet_link_end= rigidBody('velvet_link_end');
+jnt = rigidBodyJoint('velv_end_jnt','fixed');
+tform = [[eul2rotm([0 0 0], 'xyz')],[0.28+0.04,0,0.05]'; ...
+                      0 0 0                     1   ];
+setFixedTransform(jnt,tform);
+velvet_link_end.Joint = jnt;
+addBody(ur10e,velvet_link_end,'ee_link')
 end
