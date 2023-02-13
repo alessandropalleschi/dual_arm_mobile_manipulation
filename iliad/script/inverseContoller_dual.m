@@ -13,57 +13,44 @@ poseConst.OrientationTolerance = 0;
 poseConst.PositionTolerance = 0;
 initialguess =   [ -0.6417    0.6650   -2.4016    1.7425    0.9312   -3.1416         ]';
 
-dimBox=[0.19,0.14,0.29];
 
+distance_10 = 0.35;
+dimBox=[0.38,0.18,0.14];
 toSumChapa = [0;0;0.51];
 toUR10e = [0.35;0.32+0.02;0.05];
-boxPos_offset = [0;0;0];
-velvet_length = 0.28;
-velvet_height = 0.08;
 base_ur_offset = [0;0;0.035];
-boxPos =[
-    0.1340;
-    2.0800;
-    0.6860];
-boxZYX =[
-   -0.0112;
-   -0.3730;
-    0.0398];
-% 
-% boxPos =[0.00849; 2.12; 0.598];
-% boxZYX =[0.00134; 0.00211 ;-0.28];
+
+boxPos_offset = [0;+dimBox(2)/2;-dimBox(3)/2];
+
+boxPos =[1;0;0.65];     %pose in terna summit::base_footprint
+boxZYX =[-pi/2;0;0];
+
+sumPos = [0;0;0];
+sumZYX = [0;0;0];
 
 
+ZYX_d = [pi/2,0,0];
+
+% trasformazione world -> box::frame
 boxtf_01 = [[eul2rotm(boxZYX', 'ZYX')],boxPos; ...
-            0 0 0                               1  ];
+            0 0 0                               1           ];
 
-% boxPos_offset = [0;-dimBox(2)/2-velvet_length-0.3;-velvet_height/2-dimBox(3)/2];
+% Trasformazione world -> summit::base_footprint
+sumtf_01 = [[eul2rotm(sumZYX', 'ZYX')],sumPos; ...
+            0 0 0                               1           ];
+% Trasformazione summit::base_footprint -> UR10e::base
+sumtoUR10etf_12 = [[eul2rotm([0,0,0], 'ZYX')],toSumChapa+toUR10e+base_ur_offset; ...
+            0 0 0                               1           ];
+% Trasformazione world -> UR10e::base
+toUR10etf = sumtf_01*sumtoUR10etf_12;
 
-boxPos_offset = [0;-dimBox(2)/2;-dimBox(3)/2];
-distance = [[eul2rotm([0,0,0],'ZYX')],[-0.3,0,0]'; ...
-                       0 0 0              1   ];
-distance = eye(4,4)
-boxPos0 = distance*boxtf_01*[boxPos_offset;1];
-
-toUR10etf =[
-    0.0604   -0.9982    0.0000   -0.1711;
-    0.9982    0.0604    0.0004    0.9942;
-   -0.0004   -0.0000    1.0000    0.5948;
-         0         0         0    1.0000];
-
-% pos_d = inv(toUR10etf)*[boxPos0(1:3);1];
-% 
-% rotZ = eul2rotm([-pi/2,0,0],'ZYX');
-% boxZYX = rotm2eul(inv(toUR10etf(1:3,1:3))*boxtf_01(1:3,1:3)*inv(rotZ),'ZYX')';
-% ZYX_d = boxZYX';
-%  
-% poseConst.TargetTransform= [[eul2rotm(ZYX_d,'ZYX')],[pos_d(1);pos_d(2);pos_d(3)]; ...
-%                                 0 0 0                               1           ];
-
-boxPoseee = boxtf_01*[[eul2rotm([pi/2,pi/4,0],'ZYX')],[boxPos_offset(1);boxPos_offset(2);boxPos_offset(3)]; ...
+% Trasformo la posa da world frame a UR10e::base frame per l'IK
+Point_d0 = boxtf_01*[[eul2rotm(ZYX_d,'ZYX')],[boxPos_offset(1);boxPos_offset(2);boxPos_offset(3)]; ...
                                 0 0 0                               1           ];
 
-poseConst.TargetTransform = distance*inv(toUR10etf)*boxPoseee;
+Pose = inv(toUR10etf)*Point_d0;
+
+poseConst.TargetTransform = Pose;
 
 [configSoln,solnInfo] = gik(initialguess,poseConst);
 close
@@ -112,8 +99,6 @@ plot3(box_ur1(1,4),box_ur1(2,4),box_ur1(3,4),'.','Color','y','MarkerSize',50)
 %%
 
 franka = init_franka();
-% show(franka,[0,0,0,0,0,0,0]')
-%%
 
 gik = generalizedInverseKinematics('RigidBodyTree', franka, ...
     'ConstraintInputs', {'pose'});
@@ -124,27 +109,18 @@ poseConst.OrientationTolerance = 0;
 poseConst.PositionTolerance = 0;
 initialguess = [0;-0.7853;0;-2.35619;0;1.57079;0.785398];
 
-dimBox=[0.19,0.14,0.29];
+dimBox=[0.38,0.18,0.14];
 toSumChapa = [0;0;0.51];
 toFranka = [0.25;-0.22;0.15];
-
-% boxPos =[    0.1340;    2.0800;    0.6860];
-% boxZYX =[    -0.0112;    -0.3730;   0.0398];
-% sumPos = [0.146;0.626;0];
-% sumZYX = [1.53;0;0];
-
-boxPos =[-0.000742;2.08;0.6];
-boxZYX =[0.00513;-0.00301;0.0423];
-
-sumPos = [0.00958;0.927;0];
-sumZYX = [1.56;0;0];
 
 boxtf_01 = [[eul2rotm(boxZYX', 'ZYX')],boxPos; ...
             0 0 0                               1           ];
 
 
-
-boxPos_offset = [0;+dimBox(2)/2;dimBox(3)/2];
+boxPos_offset = [0;dimBox(2)/2-0.3;+0.3+dimBox(3)/2];
+% boxPos_offset = [0;dimBox(2)/2;+dimBox(3)/2+0.05];
+% boxPos_offset = [0;-dimBox(2)/2-0.05;+dimBox(3)/2+0.05];
+boxPos_offset = [0;+dimBox(2)/2-0.06;dimBox(3)/2+0.015];
 
 % Calcolo il pto di arrivo in relazione alla posa del box, trasformando gli
 % offset dalla terna body in terna world
@@ -165,13 +141,13 @@ toPandatf = sumtf_01*sumtopandatf_12;
 boxtf_01 = [[eul2rotm(boxZYX', 'ZYX')],boxPos; ...
             0 0 0                               1  ];
 
-boxPose2 = boxtf_01*[[eul2rotm([pi+pi/2,-pi/4,0],'ZYX')],[boxPos_offset(1);boxPos_offset(2);boxPos_offset(3)]; ...
+boxPose2 = boxtf_01*[[eul2rotm([pi+pi/2,-pi/8,0],'ZYX')],[boxPos_offset(1);boxPos_offset(2);boxPos_offset(3)]; ...
                                 0 0 0                               1           ];
 
 poseConst.TargetTransform = inv(toPandatf)*boxPose2;
 
 [configSoln,solnInfo] = gik(initialguess,poseConst);
-figure
+%figure
 show(franka,configSoln)
 hold on
 
@@ -206,15 +182,15 @@ plot3(box_B2(1,4),box_B2(2,4),box_B2(3,4),'.','Color','g','MarkerSize',50)
 plot3(box_C2(1,4),box_C2(2,4),box_C2(3,4),'.','Color','g','MarkerSize',50)
 plot3(box_D2(1,4),box_D2(2,4),box_D2(3,4),'.','Color','g','MarkerSize',50)
 
-box_ur1 = inv(toPandatf)*boxtf_01*[[eul2rotm([0,0,0],'ZYX')],boxPos_offset; ...
+box_ur1 = inv(toPandatf)*boxtf_01*[[eul2rotm([0,0,0],'ZYX')],[0;dimBox(2)/2;+dimBox(3)/2+0.05]; ...
                                             0 0 0                        1           ];
 plot3(box_ur1(1,4),box_ur1(2,4),box_ur1(3,4),'.','Color','y','MarkerSize',50)
-% box_ur1 = inv(toPandatf)*boxtf_01*[[eul2rotm([0,0,0],'ZYX')],[0;-dimBox(2)/2-0.05;+dimBox(3)/2+0.05]; ...
-%                                             0 0 0                        1           ];
-% plot3(box_ur1(1,4),box_ur1(2,4),box_ur1(3,4),'.','Color','y','MarkerSize',50)
-% box_ur1 = inv(toPandatf)*boxtf_01*[[eul2rotm([0,0,0],'ZYX')],[0;+dimBox(2)/2-0.06;dimBox(3)/2+0.015]; ...
-%                                             0 0 0                        1           ];
-% plot3(box_ur1(1,4),box_ur1(2,4),box_ur1(3,4),'.','Color','y','MarkerSize',50)
+box_ur1 = inv(toPandatf)*boxtf_01*[[eul2rotm([0,0,0],'ZYX')],[0;-dimBox(2)/2-0.05;+dimBox(3)/2+0.05]; ...
+                                            0 0 0                        1           ];
+plot3(box_ur1(1,4),box_ur1(2,4),box_ur1(3,4),'.','Color','y','MarkerSize',50)
+box_ur1 = inv(toPandatf)*boxtf_01*[[eul2rotm([0,0,0],'ZYX')],[0;+dimBox(2)/2-0.06;dimBox(3)/2+0.015]; ...
+                                            0 0 0                        1           ];
+plot3(box_ur1(1,4),box_ur1(2,4),box_ur1(3,4),'.','Color','y','MarkerSize',50)
 %%
 %-------------------------------------------------------------------------%
 
@@ -234,14 +210,6 @@ tform = [[eul2rotm([pi 0 5*pi/4], 'xyz')],[0.091*0.707+0.05 -0.091*0.707-0.05 0.
 setFixedTransform(jnt,tform);
 hand_link.Joint = jnt;
 addBody(franka,hand_link,'panda_link8')
-
-hand_link_end = rigidBody('hand_link_end');
-jnt = rigidBodyJoint('hand_end_jnt','fixed');
-tform = [[eul2rotm([pi 0 5*pi/4], 'xyz')],[(0.091+0.16)*0.707+0.05 -(0.091+0.16)*0.707-0.05 0.07]'; ...
-                      0 0 0                     1   ];
-setFixedTransform(jnt,tform);
-hand_link_end.Joint = jnt;
-addBody(franka,hand_link_end,'panda_link8')
 end
 
 function ur10e = init_ur10e()

@@ -9,7 +9,8 @@
   <xacro:property name="vel_box_x" value="0.14"/>
   <xacro:property name="vel_box_y" value="0.08"/>
   <xacro:property name="vel_box_z" value="0.28"/>
-  <xacro:property name="vel_box_dim" value="${vel_box_x} ${vel_box_y} ${vel_box_z}"/> 
+  <!-- <xacro:property name="vel_box_dim" value="${vel_box_x} ${vel_box_y} ${vel_box_z}"/> -->
+  <xacro:property name="vel_box_dim" value="${vel_box_x} 0.02 ${vel_box_z}"/> 
   <xacro:property name="vel_mass" value="1"/> 
 
   <xacro:macro name="velvet_macro" params="parent name *origin">
@@ -38,7 +39,7 @@
         <geometry>
             <box size="${vel_box_dim}"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0 -0.03 0"/>
       </collision>
       </link>
 
