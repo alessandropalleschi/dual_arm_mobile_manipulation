@@ -104,7 +104,7 @@ plot3(box_ur1(1,4),box_ur1(2,4),box_ur1(3,4),'.','Color','y','MarkerSize',50)
 
 franka = init_franka();
 % show(franka,[0,0,0,0,0,0,0]')
-
+%%
 
 gik = generalizedInverseKinematics('RigidBodyTree', franka, ...
     'ConstraintInputs', {'pose'});
