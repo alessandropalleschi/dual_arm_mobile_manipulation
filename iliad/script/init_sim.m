@@ -5,16 +5,13 @@ franka = init_franka();
 % show(franka,[0,0,0,0,0,0,0]')
 
 ur10e = init_ur10e();
-%show(ur10e)
+show(ur10e)
 
 fprintf("Robot models loaded. \n");
 
 fprintf("Ready to run simulation: \n" + ...
         "first run 'roslaunch iliad sim.launch' from terminal...\n" + ...
         "then run simulation in 'controller_stateflow.slx   \n");
-
-
-box_name = 'box_38_18_14_20::link_0';
 
 %%
 %-------------------------------------------------------------------------%
@@ -35,6 +32,14 @@ tform = [[eul2rotm([pi 0 5*pi/4], 'xyz')],[0.091*0.707+0.05 -0.091*0.707-0.05 0.
 setFixedTransform(jnt,tform);
 hand_link.Joint = jnt;
 addBody(franka,hand_link,'panda_link8')
+
+hand_link_end = rigidBody('hand_link_end');
+jnt = rigidBodyJoint('hand_end_jnt','fixed');
+tform = [[eul2rotm([pi 0 5*pi/4], 'xyz')],[(0.091+0.16)*0.707+0.05 -(0.091+0.16)*0.707-0.05 0.07]'; ...
+                      0 0 0                     1   ];
+setFixedTransform(jnt,tform);
+hand_link_end.Joint = jnt;
+addBody(franka,hand_link_end,'panda_link8')
 end
 
 function ur10e = init_ur10e()
